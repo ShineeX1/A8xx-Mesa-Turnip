@@ -73,11 +73,11 @@ Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830). Built
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.362 |
-| **Commit** | [`bbc7792`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/bbc7792f717f27b17b4c12e6a4503d703a362aac) |
+| **Commit** | [`f6f4f66`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f6f4f66c975c4ced2547e78e20c3b71850765ab5) |
 | **Commit date** | 2026-09-13 |
-| **Commit title** | Revert "nvk: Expose BAR as host cached" |
+| **Commit title** | nvk: Increase pushbuf limit in CmdBeginRendering |
 | **Build date** | 20260913 |
-| **Release** | [v26.3.0-20260913](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260913) |
+| **Release** | [v26.3.0-20260913-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260913-r2) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -87,6 +87,7 @@ Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830). Built
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260913-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260913-r2) | 2026-09-13 | [`f6f4f66`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f6f4f66c975c4ced2547e78e20c3b71850765ab5) | nvk: Increase pushbuf limit in CmdBeginRendering | Vulkan 1.4.362 |
 | [v26.3.0-20260913](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260913) | 2026-09-13 | [`bbc7792`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/bbc7792f717f27b17b4c12e6a4503d703a362aac) | Revert "nvk: Expose BAR as host cached" | Vulkan 1.4.362 |
 <!-- RECENT_BUILDS_END -->
 

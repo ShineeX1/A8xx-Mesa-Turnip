@@ -5,6 +5,7 @@ A complete log of every Banners-Turnip release — newest first. Each entry link
 <!-- BUILDS_TABLE_START -->
 | Tag | Date | Mesa Commit | Commit Title | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260913-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260913-r2) | 2026-09-13 | [`f6f4f66`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f6f4f66c975c4ced2547e78e20c3b71850765ab5) | nvk: Increase pushbuf limit in CmdBeginRendering | Vulkan 1.4.362 |
 | [v26.3.0-20260913](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260913) | 2026-09-13 | [`bbc7792`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/bbc7792f717f27b17b4c12e6a4503d703a362aac) | Revert "nvk: Expose BAR as host cached" | Vulkan 1.4.362 |
 | [v26.3.0-20260912](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260912) | 2026-09-11 | [`7cda785`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/7cda7850edd103ace21aac37d416d2fdf7a282e1) | panvk/ci: Route FS shaders through Kraid in Kraid job | Vulkan 1.4.362 |
 | [v26.3.0-20260911-r7](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260911-r7) | 2026-09-11 | [`fa9938a`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/fa9938acf2d513fa102102ec313a98106f1c84b1) | nv30: add missed fdot_replicates flag | Vulkan 1.4.362 |
