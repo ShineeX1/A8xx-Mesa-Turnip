@@ -73,11 +73,11 @@ Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830). Built
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.362 |
-| **Commit** | [`3c4c665`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/3c4c665554328c472bff05be0e9b0502f1068576) |
+| **Commit** | [`f3f3b76`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f3f3b76f9c43f16d23b90f40892a390acdef4d26) |
 | **Commit date** | 2026-09-15 |
-| **Commit title** | anv: Include page fault sources in device fault reports |
+| **Commit title** | anv: avoid redundant vertex loads in quad leaf update |
 | **Build date** | 20260915 |
-| **Release** | [v26.3.0-20260915](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915) |
+| **Release** | [v26.3.0-20260915-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915-r2) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -87,6 +87,7 @@ Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830). Built
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260915-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915-r2) | 2026-09-15 | [`f3f3b76`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f3f3b76f9c43f16d23b90f40892a390acdef4d26) | anv: avoid redundant vertex loads in quad leaf update | Vulkan 1.4.362 |
 | [v26.3.0-20260915](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915) | 2026-09-15 | [`3c4c665`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/3c4c665554328c472bff05be0e9b0502f1068576) | anv: Include page fault sources in device fault reports | Vulkan 1.4.362 |
 | [v26.3.0-20260914-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260914-r4) | 2026-09-14 | [`4519cc5`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/4519cc5645880023ed1c83417d33c4cad99e88ee) | mediafoundation: support AV1 420 10 bit encode | Vulkan 1.4.362 |
 | [v26.3.0-20260914-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260914-r3) | 2026-09-14 | [`c0ad6fd`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/c0ad6fd9ecabd06c642cb0818932647acbb21719) | nir/divergence: Handle SYSTEM_VALUE_BARYCENTRIC_* | Vulkan 1.4.362 |
