@@ -5,6 +5,7 @@ A complete log of every Banners-Turnip release — newest first. Each entry link
 <!-- BUILDS_TABLE_START -->
 | Tag | Date | Mesa Commit | Commit Title | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260915](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915) | 2026-09-15 | [`3c4c665`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/3c4c665554328c472bff05be0e9b0502f1068576) | anv: Include page fault sources in device fault reports | Vulkan 1.4.362 |
 | [v26.3.0-20260914-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260914-r4) | 2026-09-14 | [`4519cc5`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/4519cc5645880023ed1c83417d33c4cad99e88ee) | mediafoundation: support AV1 420 10 bit encode | Vulkan 1.4.362 |
 | [v26.3.0-20260914-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260914-r3) | 2026-09-14 | [`c0ad6fd`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/c0ad6fd9ecabd06c642cb0818932647acbb21719) | nir/divergence: Handle SYSTEM_VALUE_BARYCENTRIC_* | Vulkan 1.4.362 |
 | [v26.3.0-20260914-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260914-r2) | 2026-09-14 | [`1d8179f`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/1d8179f51d3f2032c949b161b3f0fe4c0530532c) | freedreno/pps: Queue perf counter stream samples | Vulkan 1.4.362 |
