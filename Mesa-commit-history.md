@@ -5,6 +5,7 @@ A complete log of every Banners-Turnip release — newest first. Each entry link
 <!-- BUILDS_TABLE_START -->
 | Tag | Date | Mesa Commit | Commit Title | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260915-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915-r5) | 2026-09-15 | [`822120d`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/822120d6d5c0109f98c3fbf85ec716c5d1fa00b6) | etnaviv: Drop the fragment shader R/B swap | Vulkan 1.4.362 |
 | [v26.3.0-20260915-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915-r4) | 2026-09-15 | [`46744ba`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/46744ba2134b19e766c4ddb9a82ac34980400903) | spirv: Don't implicitly set ACCESS_NON_WRITEABLE for input attachments | Vulkan 1.4.362 |
 | [v26.3.0-20260915-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915-r3) | 2026-09-15 | [`c6b3e52`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/c6b3e52a9e5135ce3b8972ac2b52e76a7e04b356) | turnip: enable DEVICE_LOCAL-only memory type for RDR2 | Vulkan 1.4.362 |
 | [v26.3.0-20260915-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915-r2) | 2026-09-15 | [`f3f3b76`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f3f3b76f9c43f16d23b90f40892a390acdef4d26) | anv: avoid redundant vertex loads in quad leaf update | Vulkan 1.4.362 |
