@@ -2,17 +2,116 @@ name: Build Turnip (Combined)
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Build and verify all six drivers and write the release body, but publish nothing (no tag, release or README commit)"
+        type: boolean
+        default: false
+      mesa_commit:
+        description: "Full 40-hex Mesa commit to build (empty = mesa/mesa main HEAD)"
+        type: string
+        default: ""
 
 permissions:
   contents: write
 
+# One release run at a time, so the -rN counter the resolve job picks is still free when the
+# release job publishes. A newer queued run replaces an older queued one (it builds a newer Mesa).
+concurrency:
+  group: turnip-combined-${{ inputs.dry_run && 'dry-run' || 'release' }}
+  cancel-in-progress: false
+
 jobs:
+  # The Mesa commit and the release tag, decided once for every leg: all six drivers are built
+  # from the same commit and named from the same tag.
+  resolve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      commit: ${{ steps.r.outputs.commit }}
+      tag: ${{ steps.r.outputs.tag }}
+      day_num: ${{ steps.r.outputs.day_num }}
+    steps:
+      - name: Resolve Mesa commit and release tag
+        id: r
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_COMMIT: ${{ inputs.mesa_commit }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          if [ -n "$INPUT_COMMIT" ] && ! [[ "$INPUT_COMMIT" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error::mesa_commit must be a full 40-hex commit"; exit 1
+          fi
+          REF="${INPUT_COMMIT:-refs/heads/main}"
+          git init -q mesa
+          git -C mesa remote add origin https://gitlab.freedesktop.org/mesa/mesa.git
+          ok=0
+          for i in 1 2 3 4; do
+            if git -C mesa fetch -q --depth=1 origin "$REF"; then ok=1; break; fi
+            echo "Mesa fetch attempt $i failed, retrying in 30 s"; sleep 30
+          done
+          [ "$ok" = 1 ] || { echo "::error::could not fetch Mesa $REF"; exit 1; }
+          git -C mesa checkout -q FETCH_HEAD
+
+          MESA_VERSION=$(cat mesa/VERSION 2>/dev/null | sed 's/-devel.*//' | tr -d '[:space:]' || echo "unknown")
+          BUILD_DATE=$(date +%Y%m%d)
+          GITHASH=$(git -C mesa rev-parse --short HEAD)
+          GITHASH_FULL=$(git -C mesa rev-parse HEAD)
+          COMMIT_DATE=$(git -C mesa log -1 --format="%ci" | cut -d' ' -f1)
+          COMMIT_TITLE=$(git -C mesa log -1 --format="%s")
+          TAG="v${MESA_VERSION}-${BUILD_DATE}"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" &>/dev/null; then
+            EXISTING=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName \
+              | jq -r '.[].tagName' \
+              | { grep -oP "^v${MESA_VERSION}-${BUILD_DATE}-r\K[0-9]+$" || true; } \
+              | sort -n \
+              | tail -1)
+            NEXT_R=$(( ${EXISTING:-1} + 1 ))
+            TAG="${TAG}-r${NEXT_R}"
+            echo "Tag already exists — using ${TAG}"
+          fi
+          if [[ "$TAG" =~ -r([0-9]+)$ ]]; then
+            DAY_NUM="${BASH_REMATCH[1]}"
+          else
+            DAY_NUM="1"
+          fi
+          VK_PATCH=$(grep '^#define VK_HEADER_VERSION ' mesa/include/vulkan/vulkan_core.h | awk '{print $3}')
+          VK_MINOR=$(grep 'define TU_API_VERSION' mesa/src/freedreno/vulkan/tu_device.cc | grep -oP 'VK_MAKE_VERSION\(\s*[0-9]+,\s*\K[0-9]+')
+          VULKAN_VERSION="Vulkan 1.${VK_MINOR}.${VK_PATCH}"
+          [[ "$GITHASH_FULL" =~ ^[0-9a-f]{40}$ ]] || { echo "::error::no Mesa commit"; exit 1; }
+
+          mkdir -p release-info
+          printf '%s\n' "$TAG"            > release-info/tag.txt
+          printf '%s\n' "$MESA_VERSION"   > release-info/mesa_version.txt
+          printf '%s\n' "$BUILD_DATE"     > release-info/build_date.txt
+          printf '%s\n' "$GITHASH"        > release-info/githash.txt
+          printf '%s\n' "$GITHASH_FULL"   > release-info/githash_full.txt
+          printf '%s\n' "$COMMIT_DATE"    > release-info/commit_date.txt
+          printf '%s\n' "$COMMIT_TITLE"   > release-info/commit_title.txt
+          printf '%s\n' "$VULKAN_VERSION" > release-info/vulkan_version.txt
+
+          echo "commit=${GITHASH_FULL}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "day_num=${DAY_NUM}" >> "$GITHUB_OUTPUT"
+          echo "Mesa ${MESA_VERSION} ${GITHASH_FULL} (${COMMIT_DATE}) — tag ${TAG}, ${VULKAN_VERSION}, dry_run=${DRY_RUN:-false}"
+
+      - name: Upload release info
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-info
+          path: release-info/
+
+  # Android (AdrenoTools) drivers: the release zips external catalogs match on. Names and the
+  # build recipe are unchanged; the legs are pinned to the resolved commit and checked after zipping.
   build:
     runs-on: ubuntu-latest
+    needs: resolve
+    timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
-        include:
+        # Shared with the Wayland legs (alias below): one recipe per driver.
+        include: &drivers
           - variant: regular
             suffix: ""
             extra_patch: ""
@@ -42,6 +141,7 @@ jobs:
         run: |
           chmod +x build_turnip.sh
           export BUILD_VERSION="${{ github.run_number }}"
+          export MESA_COMMIT="${{ needs.resolve.outputs.commit }}"
           [[ -n "${{ matrix.extra_patch }}" ]] && export EXTRA_PATCH="${{ matrix.extra_patch }}"
           [[ -n "${{ matrix.extra_script }}" ]] && export EXTRA_SCRIPT="${{ matrix.extra_script }}"
           ./build_turnip.sh
@@ -49,29 +149,13 @@ jobs:
       - name: Rename ZIP
         id: info
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ needs.resolve.outputs.tag }}
+          DAY_NUM: ${{ needs.resolve.outputs.day_num }}
+          MESA_COMMIT: ${{ needs.resolve.outputs.commit }}
         run: |
-          MESA_VERSION=$(cat turnip_workdir/mesa/VERSION 2>/dev/null | sed 's/-devel.*//' | tr -d '[:space:]' || echo "unknown")
-          BUILD_DATE=$(date +%Y%m%d)
-          GITHASH=$(git -C turnip_workdir/mesa rev-parse --short HEAD 2>/dev/null || echo "unknown")
-          GITHASH_FULL=$(git -C turnip_workdir/mesa rev-parse HEAD 2>/dev/null || echo "")
-          COMMIT_DATE=$(git -C turnip_workdir/mesa log -1 --format="%ci" 2>/dev/null | cut -d' ' -f1 || echo "unknown")
-          COMMIT_TITLE=$(git -C turnip_workdir/mesa log -1 --format="%s" 2>/dev/null || echo "")
-          TAG="v${MESA_VERSION}-${BUILD_DATE}"
-          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" &>/dev/null; then
-            EXISTING=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName \
-              | jq -r '.[].tagName' \
-              | grep -oP "^v${MESA_VERSION}-${BUILD_DATE}-r\K[0-9]+$" \
-              | sort -n \
-              | tail -1)
-            NEXT_R=$(( ${EXISTING:-1} + 1 ))
-            TAG="${TAG}-r${NEXT_R}"
-            echo "Tag already exists — using ${TAG}"
-          fi
-          if [[ "$TAG" =~ -r([0-9]+)$ ]]; then
-            DAY_NUM="${BASH_REMATCH[1]}"
-          else
-            DAY_NUM="1"
+          BUILT=$(git -C turnip_workdir/mesa rev-parse HEAD 2>/dev/null || echo "unknown")
+          if [ "$BUILT" != "$MESA_COMMIT" ]; then
+            echo "::error::this leg built Mesa ${BUILT}, the run resolved ${MESA_COMMIT}"; exit 1
           fi
           ZIP_NAME="Turnip-${TAG}${{ matrix.suffix }}.zip"
           SRC=$(ls turnip_workdir/mesa-turnip-*.zip | head -1)
@@ -81,64 +165,125 @@ jobs:
           META_DESC="${{ matrix.meta_desc }}"
           python3 -c "import json,sys; p='${UNZIP_DIR}/meta.json'; m=json.load(open(p)); m['name']='${META_NAME}'; m['packageVersion']='${DAY_NUM}'; d='${META_DESC}'; m.update({'description':d} if d else {}); json.dump(m,open(p,'w'),indent=2); print('meta.json:',m['name'],'| packageVersion:',m['packageVersion'])"
           (cd "$UNZIP_DIR" && zip -q - *) > "turnip_workdir/${ZIP_NAME}"
-          VK_PATCH=$(grep '^#define VK_HEADER_VERSION ' turnip_workdir/mesa/include/vulkan/vulkan_core.h | awk '{print $3}')
-          VK_MINOR=$(grep 'define TU_API_VERSION' turnip_workdir/mesa/src/freedreno/vulkan/tu_device.cc | grep -oP 'VK_MAKE_VERSION\(\s*[0-9]+,\s*\K[0-9]+')
-          VULKAN_VERSION="Vulkan 1.${VK_MINOR}.${VK_PATCH}"
-          echo "tag=${TAG}" >> $GITHUB_OUTPUT
-          echo "mesa_version=${MESA_VERSION}" >> $GITHUB_OUTPUT
-          echo "build_date=${BUILD_DATE}" >> $GITHUB_OUTPUT
-          echo "githash=${GITHASH}" >> $GITHUB_OUTPUT
-          echo "githash_full=${GITHASH_FULL}" >> $GITHUB_OUTPUT
-          echo "commit_date=${COMMIT_DATE}" >> $GITHUB_OUTPUT
-          echo "commit_title=${COMMIT_TITLE}" >> $GITHUB_OUTPUT
-          echo "vulkan_version=${VULKAN_VERSION}" >> $GITHUB_OUTPUT
+          echo "zip_name=${ZIP_NAME}" >> $GITHUB_OUTPUT
 
-      - name: Save release info
-        if: matrix.variant == 'regular'
+      - name: Verify driver ZIP
         env:
-          RI_TAG: ${{ steps.info.outputs.tag }}
-          RI_MESA_VERSION: ${{ steps.info.outputs.mesa_version }}
-          RI_BUILD_DATE: ${{ steps.info.outputs.build_date }}
-          RI_GITHASH: ${{ steps.info.outputs.githash }}
-          RI_GITHASH_FULL: ${{ steps.info.outputs.githash_full }}
-          RI_COMMIT_DATE: ${{ steps.info.outputs.commit_date }}
-          RI_COMMIT_TITLE: ${{ steps.info.outputs.commit_title }}
-          RI_VULKAN_VERSION: ${{ steps.info.outputs.vulkan_version }}
+          ZIP_NAME: ${{ steps.info.outputs.zip_name }}
+          TAG: ${{ needs.resolve.outputs.tag }}
+          DAY_NUM: ${{ needs.resolve.outputs.day_num }}
+          MESA_COMMIT: ${{ needs.resolve.outputs.commit }}
+          VARIANT: ${{ matrix.variant }}
+          SUFFIX: ${{ matrix.suffix }}
+          EXTRA_PATCH: ${{ matrix.extra_patch }}
+          EXTRA_SCRIPT: ${{ matrix.extra_script }}
         run: |
-          mkdir -p release-info
-          printf '%s\n' "$RI_TAG"          > release-info/tag.txt
-          printf '%s\n' "$RI_MESA_VERSION" > release-info/mesa_version.txt
-          printf '%s\n' "$RI_BUILD_DATE"   > release-info/build_date.txt
-          printf '%s\n' "$RI_GITHASH"      > release-info/githash.txt
-          printf '%s\n' "$RI_GITHASH_FULL" > release-info/githash_full.txt
-          printf '%s\n' "$RI_COMMIT_DATE"  > release-info/commit_date.txt
-          printf '%s\n' "$RI_COMMIT_TITLE" > release-info/commit_title.txt
-          printf '%s\n' "$RI_VULKAN_VERSION" > release-info/vulkan_version.txt
-
-      - name: Upload release info
-        if: matrix.variant == 'regular'
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-info
-          path: release-info/
+          python3 -c "import json,os; json.dump({k.lower(): os.environ[k] for k in ('MESA_COMMIT','EXTRA_PATCH','EXTRA_SCRIPT')}, open('build-report.json','w'))"
+          python3 .github/scripts/verify_driver_zip.py --kind android \
+            --zip "turnip_workdir/${ZIP_NAME}" --variant "$VARIANT" \
+            --expect-name "Mesa Turnip ${TAG}${SUFFIX}" --expect-package-version "$DAY_NUM" \
+            --build-report build-report.json --report "report-android-${VARIANT}.json"
 
       - name: Upload driver ZIP
         uses: actions/upload-artifact@v4
         with:
           name: turnip-${{ matrix.variant }}
           path: turnip_workdir/Turnip-*.zip
+          if-no-files-found: error
+
+      - name: Upload verification report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-android-${{ matrix.variant }}
+          path: report-android-*.json
+          if-no-files-found: error
+
+  # Wayland (Linux-style ICD) builds of the same three drivers for Bannerlator's Wayland
+  # containers. Independent of the Android legs: a failure here only drops that one zip.
+  wayland:
+    runs-on: ubuntu-24.04
+    needs: resolve
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include: *drivers
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build unzip flex bison glslang-tools curl ccache pkg-config \
+            clang lld llvm python3-pip zip patch binutils
+          pip3 install --break-system-packages meson mako pyyaml packaging
+
+      - name: Build (Wayland)
+        env:
+          MESA_COMMIT: ${{ needs.resolve.outputs.commit }}
+          ZIP_NAME: Turnip-${{ needs.resolve.outputs.tag }}${{ matrix.suffix }}-Wayland.zip
+          META_NAME: Mesa Turnip ${{ needs.resolve.outputs.tag }}${{ matrix.suffix }}-Wayland
+          PACKAGE_VERSION: ${{ needs.resolve.outputs.day_num }}
+          META_DESC: ${{ matrix.meta_desc }}
+          EXTRA_PATCH: ${{ matrix.extra_patch }}
+          EXTRA_SCRIPT: ${{ matrix.extra_script }}
+          VARIANT: ${{ matrix.variant }}
+        run: |
+          ccache -M 2G
+          chmod +x build_turnip_wayland.sh
+          ./build_turnip_wayland.sh
+
+      - name: Verify Wayland ZIP
+        env:
+          ZIP_NAME: Turnip-${{ needs.resolve.outputs.tag }}${{ matrix.suffix }}-Wayland.zip
+          META_NAME: Mesa Turnip ${{ needs.resolve.outputs.tag }}${{ matrix.suffix }}-Wayland
+          PACKAGE_VERSION: ${{ needs.resolve.outputs.day_num }}
+          VARIANT: ${{ matrix.variant }}
+        run: |
+          python3 .github/scripts/verify_driver_zip.py --kind wayland \
+            --zip "wayland_workdir/${ZIP_NAME}" --variant "$VARIANT" \
+            --expect-name "$META_NAME" --expect-package-version "$PACKAGE_VERSION" \
+            --layer-abi patches/wayland/layer-abi \
+            --build-report wayland_workdir/build-report.json --report "report-wayland-${VARIANT}.json"
+
+      - name: Upload Wayland driver ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: turnip-wayland-${{ matrix.variant }}
+          path: wayland_workdir/Turnip-*-Wayland.zip
+          if-no-files-found: error
+
+      - name: Upload verification report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-wayland-${{ matrix.variant }}
+          path: report-wayland-*.json
+          if-no-files-found: error
+
+      - name: Upload build evidence on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wayland-failed-${{ matrix.variant }}
+          path: |
+            wayland_workdir/mesa/build-wayland/meson-logs/meson-log.txt
+            wayland_workdir/build-report.json
+            wayland_workdir/termux-versions.txt
+          if-no-files-found: ignore
 
   release:
     runs-on: ubuntu-latest
-    needs: build
-    # Publish whatever drivers built. A broken experimental leg (e.g. A8xx
-    # failing to compile against bleeding-edge Mesa) must NOT block shipping
-    # the standard A6xx/A7xx driver most users grab. The failed build leg
-    # still shows red, so the breakage stays visible and gets fixed.
-    if: ${{ !cancelled() }}
+    needs: [resolve, build, wayland]
+    # Publish whatever drivers built and verified. A failed leg (an experimental Android driver
+    # against bleeding-edge Mesa, or any Wayland build) must NOT block the standard driver most
+    # users grab; the failed leg still shows red and the release body names it.
+    if: ${{ !cancelled() && needs.resolve.result == 'success' }}
+    timeout-minutes: 30
 
     steps:
-      - name: Checkout repo (for patch list)
+      - name: Checkout repo (patch files, scripts)
         uses: actions/checkout@v4
 
       - name: Download driver ZIPs
@@ -149,138 +294,66 @@ jobs:
           path: ./zips
         continue-on-error: true
 
+      - name: Download verification reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: report-*
+          merge-multiple: true
+          path: ./reports
+        continue-on-error: true
+
       - name: Download release info
         uses: actions/download-artifact@v4
         with:
           name: release-info
           path: ./release-info
-        continue-on-error: true
-
-      - name: Require standard-driver metadata
-        run: |
-          # release-info is produced only by the 'regular' leg and carries the
-          # tag/version the release is named from. If the standard driver itself
-          # failed there is nothing coherent to publish — fail loudly here.
-          if [ ! -f release-info/tag.txt ]; then
-            echo "::error::Standard (A6xx/A7xx) driver build failed — no release metadata produced; nothing to publish."
-            exit 1
-          fi
-          echo "Drivers present this run:"; ls -1 zips/ || true
 
       - name: Write release body
         run: |
-          TAG=$(cat release-info/tag.txt)
-          MESA_VERSION=$(cat release-info/mesa_version.txt)
-          BUILD_DATE=$(cat release-info/build_date.txt)
-          GITHASH=$(cat release-info/githash.txt)
-          GITHASH_FULL=$(cat release-info/githash_full.txt)
-          COMMIT_DATE=$(cat release-info/commit_date.txt)
-          COMMIT_TITLE=$(cat release-info/commit_title.txt)
-          VULKAN_VERSION=$(cat release-info/vulkan_version.txt)
-          ZIP_REGULAR="Turnip-${TAG}.zip"
-          ZIP_A8XX="Turnip-${TAG}-A8xx.zip"
-          ZIP_A7XX_TEST="Turnip-${TAG}-710-720-Test.zip"
-          MESA_URL="https://gitlab.freedesktop.org/mesa/mesa/-/commit/${GITHASH_FULL}"
-          # Which driver ZIPs actually built this run? A failed leg = missing ZIP.
-          BUILT=$(ls zips/*.zip 2>/dev/null | wc -l | tr -d '[:space:]')
-          MISSING=""
-          [ -f "zips/${ZIP_REGULAR}" ]   || MISSING="${MISSING}\n- A6xx / A7xx standard (\`${ZIP_REGULAR}\`)"
-          [ -f "zips/${ZIP_A8XX}" ]      || MISSING="${MISSING}\n- A8xx (\`${ZIP_A8XX}\`)"
-          [ -f "zips/${ZIP_A7XX_TEST}" ] || MISSING="${MISSING}\n- A710 / A720 / A722 test (\`${ZIP_A7XX_TEST}\`)"
-          {
-            printf "> ⚠️ **AUTOMATED BUILD — Not guaranteed stable. Use at your own risk.**\n\n"
-            if [ -n "$MISSING" ]; then
-              printf "> ⚠️ **Partial release — %s of 3 drivers.** These failed to build this run and are NOT included (fix and re-run to add them):%b\n\n" "$BUILT" "$MISSING"
-            fi
-            printf '%s\n\n' '---'
-            printf "### Mesa Upstream\n\n"
-            printf "| | |\n"
-            printf "| :--- | :--- |\n"
-            printf "| **Version** | %s |\n"        "${MESA_VERSION}"
-            printf "| **Commit** | [\`%s\`](%s) |\n" "${GITHASH}" "${MESA_URL}"
-            printf "| **Vulkan version** | %s |\n"  "${VULKAN_VERSION}"
-            printf "| **Commit date** | %s |\n"    "${COMMIT_DATE}"
-            printf "| **Commit title** | %s |\n"   "${COMMIT_TITLE}"
-            printf "| **Build date** | %s |\n\n"   "${BUILD_DATE}"
-            printf '%s\n\n' '---'
-            printf "### A6xx / A7xx — Standard\n\n"
-            printf "The everyday driver for most Adreno phones — **Snapdragon 600–800 series** (7 Gen, 8 Gen 1–3). Built straight from the latest upstream Mesa with no extra patches, so it's the safest, most-compatible pick. Not sure which file to grab? It's this one.\n\n"
-            printf '<details>\n<summary>Technical details</summary>\n\n'
-            printf "Pure Mesa \`main\` (latest upstream commit, no source patches). Three inline NDK r29 compatibility fixes applied at build time:\n\n"
-            printf '%s\n' "- \`buffer_handle_t\` typedef fix (\`native_handle.h\`)"
-            printf '%s\n' "- \`hnd->handle\` void-cast fix (\`u_gralloc_fallback.c\`)"
-            printf '%s\n\n' "- \`native_buffer->handle\` cast fix (\`vk_android.c\`)"
-            printf '</details>\n\n'
-            printf '%s\n\n' '---'
-            printf "### A8xx — Snapdragon 8 Elite\n\n"
-            printf "For the newest **Snapdragon 8 Elite** phones — **Adreno 840 / 830 / 829 / 825 / 810**. This is the same A8xx driver the community runs — whitebelyash's \`turnip/gen8\` stack (as shipped in [tu_v29](https://github.com/whitebelyash/AdrenoToolsDrivers/releases/tag/tu_v29) and [StevenMXZ v33](https://github.com/StevenMXZ/Adreno-Tools-Drivers/releases/tag/v33)) — rebuilt on the latest Mesa. Still experimental, so a couple of tips:\n\n"
-            printf '%s\n' "- **A830 looking glitchy?** Add \`TU_DEBUG=sysmem\` to your environment."
-            printf '%s\n\n' "- **A game won't start on Qualcomm?** Try \`TU_DEBUG=deck_emu\` (spoofs a Steam Deck)."
-            printf '<details>\n<summary>Technical details — patches and provenance</summary>\n\n'
-            printf "Built from **[whitebelyash/mesa-unified](https://github.com/whitebelyash/mesa-unified) \`turnip/gen8\`** — the canonical community A8xx Turnip stack — curated to its A8xx-relevant commits (cosmetic driver-string/versioning commits and anything already in Mesa \`main\` are dropped) and rebuilt on bleeding-edge Mesa. Same stack shipped in [tu_v29](https://github.com/whitebelyash/AdrenoToolsDrivers/releases/tag/tu_v29) and [StevenMXZ v33](https://github.com/StevenMXZ/Adreno-Tools-Drivers/releases/tag/v33).\n\n"
-            printf "**[a8xx_gen8.patch](https://github.com/The412Banner/Banners-Turnip/blob/A8xx/patches/a8xx_gen8.patch) — 13 commits, by author:**\n\n"
-            printf '%s\n\n' "*whitebelyash — \`turnip/gen8\` author & curator:*"
-            printf '%s\n' "- \`disable_gmem\` GPU property (force-sysmem path)"
-            printf '%s\n' "- \`u_gralloc\`: always use UBWC detection (fixes distorted picture on newer gralloc)"
-            printf '%s\n' "- drm-shim entries for A810 / A825 / A829"
-            printf '%s\n' "- enable **A825**"
-            printf '%s\n' "- HACK: expose **VK 1.3 without multiview** (lets Minecraft run on VK1.0-only GPUs)"
-            printf '%s\n\n' "- HACK: enforce \`TU_DEBUG=nocb\` (disable concurrent binning — better for IMR/PC workloads)"
-            printf '%s\n\n' "*DVD (dmitrijnemov13 / disk_dvd):*"
-            printf '%s\n' "- update A8xx family configs (\`gmem_size\`, cache sizes, tile alignment)"
-            printf '%s\n' "- minor A810 fixes (\`reg_size=96\`)"
-            printf '%s\n' "- A810 codegen profiles (FP16 lowering, register-pressure scaling, delay-slot / barrier tuning)"
-            printf '%s\n' "- fix gmem offsets for **A825 / A829**"
-            printf '%s\n' "- enable custom resolve / off-MSAA / FDM for **A810 / 825 / 829 / 830**"
-            printf '%s\n\n' "- ir3: coalesce UBO-promotion ranges on **A810**"
-            printf '%s\n\n' "*Igalia (Karmjit Mahil, upstream MR):*"
-            printf '%s\n\n' "- \`TU_DEBUG=deck_emu\` — advertise as a Steam Deck (helps games that gate on a known GPU)"
-            printf "Plus build-time: \`a8xx_shared_mem.py\` raises A8xx compute shared-mem 32→64 KiB.\n\n"
-            printf "**Banners-Turnip local delta (not upstream):** \`turnip/gen8\`'s disable_gmem hunk still wrote \`tu_render_pass_state::gmem_disable_reason\`, which Mesa renamed to \`force_render_mode_reason\`; we carry that rename so the stack builds against current Mesa \`main\`.\n\n"
-            printf "**Already in Mesa \`main\` (no patch needed):** A840 (\`0xffff44050A31\`), A613, A830 properties, magic regs, UBWC 5/6 KGSL, reg_size fixes.\n\n"
-            printf "> ⚠️ Compile-verified only — not yet device-proven; A8xx owners please test and report.\n\n"
-            printf '</details>\n\n'
-            printf '%s\n\n' '---'
-            printf "### A710 / A720 / A722 — Experimental\n\n"
-            printf "An experimental test build adding **Adreno 710 / 720 / 722** support (these chips aren't in upstream Mesa yet). ⚠️ **Not yet verified on real hardware.** If you try it:\n\n"
-            printf '%s\n' "- Set \`TU_DEBUG=sysmem\` in your emulator/app environment."
-            printf '%s\n\n' "- **Winlator users:** also set \`WRAPPER_BLIT=1\`."
-            printf "It won't affect any other GPU — it only activates on those exact chip IDs, and the standard ZIP is completely unaffected.\n\n"
-            printf '<details>\n<summary>Technical details</summary>\n\n'
-            printf "Pure Mesa \`main\` plus per-GPU entries injected via [\`a710-720.py\`](https://github.com/The412Banner/Banners-Turnip/blob/A8xx/patches/a710-720.py) (from [Vauzi-17/710](https://github.com/Vauzi-17/710/blob/main/add_710_720_722.py)), using hardware-captured magic registers:\n\n"
-            printf '%s\n' "- **A710** (\`0x07010000\`) — per-GPU \`a710_raw_magic_regs\` from real A710 blob traces."
-            printf '%s\n' "- **A720** (\`0x43020000\`) — per-GPU \`a720_raw_magic_regs\` from real A720 blob traces."
-            printf '%s\n\n' "- **A722** (\`0x43020100\`) — per-GPU \`a722_raw_magic_regs\` (distinct \`PC_MODE_CNTL=0x3f\`, \`UCHE_CACHE_WAYS=0x0\`)."
-            printf "\`num_ccu=3\`, \`tile_align_w=64\`, \`tile_align_h=32\`; other properties inherited from Mesa's \`a7xx_base\`/\`a7xx_gen1\`. None of these chip IDs exist in Mesa main or the Linux kernel device catalog.\n\n"
-            printf '</details>\n\n'
-            printf '%s\n\n' '---'
-            printf "### Adreno GPU Support\n\n"
-            printf "| Series | File | Notes |\n"
-            printf "| :--- | :--- | :--- |\n"
-            printf "| A6xx / A7xx | \`%s\` | Pure Mesa main — Snapdragon 600–800 series, 7/8 Gen 1–3 |\n" "${ZIP_REGULAR}"
-            printf "| A8xx | \`%s\` | Experimental — Snapdragon 8 Elite (A840/A830/A829/A825/A810) |\n" "${ZIP_A8XX}"
-            printf "| A710 / A720 / A722 | \`%s\` | ⚠️ UNVERIFIED — Adreno 710/720/722 test build, needs hardware testing |\n\n" "${ZIP_A7XX_TEST}"
-            printf "> **Which file?**  A6xx/A7xx → standard ZIP · A8xx (Snapdragon 8 Elite) → A8xx ZIP · A710/A720/A722 owners → 710-720-Test ZIP\n\n"
-            printf '%s\n\n' '---'
-            printf "### Installation\n\n"
-            printf '%s\n' "- **BannerHub / BCI:** Component Manager → Add New Component → select the ZIP"
-            printf '%s\n' "- **Winlator / adrenotools:** load the ZIP in GPU driver settings"
-          } > release_body.md
+          mkdir -p zips reports
+          echo "Drivers present this run:"; ls -la zips/
+          rc=0
+          python3 .github/scripts/release_body.py --info release-info --zips zips --reports reports \
+            --out release_body.md --assets release_assets.txt || rc=$?
+          if [ "$rc" != 0 ]; then
+            echo "::error::no release: the standard Android driver did not build/verify (release_body.py exit $rc)"
+            exit 1
+          fi
+          echo "================ release body ================"
+          cat release_body.md
+          echo "================ assets ================"
+          cat release_assets.txt
+          { echo "## Release body (${{ inputs.dry_run && 'dry run: NOT published' || 'to publish' }})"; echo; cat release_body.md; } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload release body
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-body
+          path: |
+            release_body.md
+            release_assets.txt
+          if-no-files-found: ignore
 
       - name: Create release
+        if: ${{ !inputs.dry_run }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG=$(cat release-info/tag.txt)
-          MESA_VERSION=$(cat release-info/mesa_version.txt)
-          BUILD_DATE=$(cat release-info/build_date.txt)
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" &>/dev/null; then
+            echo "::error::release $TAG already exists (another run published it); the zips carry this tag in meta.json, not re-publishing"
+            exit 1
+          fi
+          mapfile -t ASSETS < release_assets.txt
           gh release create "$TAG" \
             --repo "$GITHUB_REPOSITORY" \
             --title "Turnip ${TAG}" \
             --notes-file release_body.md \
-            zips/*.zip
+            "${ASSETS[@]}"
 
       - name: Update README with build info
+        if: ${{ !inputs.dry_run }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -302,4 +375,9 @@ jobs:
           python3 .github/scripts/update_builds.py
           git add README.md Mesa-commit-history.md
           git diff --staged --quiet || git commit -m "docs: update build info [$BT_TAG]"
-          git push origin A8xx
+          for i in 1 2 3; do
+            git push origin A8xx && exit 0
+            echo "push attempt $i rejected, rebasing"; sleep 5
+            git pull --rebase origin A8xx
+          done
+          exit 1
