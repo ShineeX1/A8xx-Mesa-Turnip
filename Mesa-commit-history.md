@@ -5,6 +5,7 @@ A complete log of every Banners-Turnip release — newest first. Each entry link
 <!-- BUILDS_TABLE_START -->
 | Tag | Date | Mesa Commit | Commit Title | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260916-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r2) | 2026-09-16 | [`848eb4f`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/848eb4f3153e8f03d382b5145ea45068a11971d9) | v3dv: remove render pass fields from pipeline | Vulkan 1.4.362 |
 | [v26.3.0-20260916](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916) | 2026-09-15 | [`9df9c70`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/9df9c70f17214c4f04843d2b180ce03f8c3eef4a) | intel/brw/xe3+: Consider trivial scheduling heuristic in pre-RA scheduling pass. | Vulkan 1.4.362 |
 | [v26.3.0-20260915-r6](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915-r6) | 2026-09-15 | [`f9f8f77`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f9f8f777d01feee8f46fcd1ba037ee51203becda) | etnaviv: blt: Clear each 128-bit plane with its own clear bits | Vulkan 1.4.362 |
 | [v26.3.0-20260915-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915-r5) | 2026-09-15 | [`822120d`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/822120d6d5c0109f98c3fbf85ec716c5d1fa00b6) | etnaviv: Drop the fragment shader R/B swap | Vulkan 1.4.362 |
