@@ -73,11 +73,11 @@ Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830). Built
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.362 |
-| **Commit** | [`848eb4f`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/848eb4f3153e8f03d382b5145ea45068a11971d9) |
+| **Commit** | [`2846d7e`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/2846d7e13d9dce17e2441ca3f168f34d1e918fd5) |
 | **Commit date** | 2026-09-16 |
-| **Commit title** | v3dv: remove render pass fields from pipeline |
+| **Commit title** | radeonsi: wait for graphics shaders differently on GFX10-11.7 |
 | **Build date** | 20260916 |
-| **Release** | [v26.3.0-20260916-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r2) |
+| **Release** | [v26.3.0-20260916-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r3) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -87,12 +87,12 @@ Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830). Built
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260916-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r3) | 2026-09-16 | [`2846d7e`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/2846d7e13d9dce17e2441ca3f168f34d1e918fd5) | radeonsi: wait for graphics shaders differently on GFX10-11.7 | Vulkan 1.4.362 |
 | [v26.3.0-20260916-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r2) | 2026-09-16 | [`848eb4f`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/848eb4f3153e8f03d382b5145ea45068a11971d9) | v3dv: remove render pass fields from pipeline | Vulkan 1.4.362 |
 | [v26.3.0-20260916](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916) | 2026-09-16 | [`9df9c70`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/9df9c70f17214c4f04843d2b180ce03f8c3eef4a) | intel/brw/xe3+: Consider trivial scheduling heuristic in pre-RA scheduling pass. | Vulkan 1.4.362 |
 | [v26.3.0-20260915-r6](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915-r6) | 2026-09-15 | [`f9f8f77`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f9f8f777d01feee8f46fcd1ba037ee51203becda) | etnaviv: blt: Clear each 128-bit plane with its own clear bits | Vulkan 1.4.362 |
 | [v26.3.0-20260915-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915-r5) | 2026-09-15 | [`822120d`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/822120d6d5c0109f98c3fbf85ec716c5d1fa00b6) | etnaviv: Drop the fragment shader R/B swap | Vulkan 1.4.362 |
 | [v26.3.0-20260915-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915-r4) | 2026-09-15 | [`46744ba`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/46744ba2134b19e766c4ddb9a82ac34980400903) | spirv: Don't implicitly set ACCESS_NON_WRITEABLE for input attachments | Vulkan 1.4.362 |
-| [v26.3.0-20260915-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260915-r3) | 2026-09-15 | [`c6b3e52`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/c6b3e52a9e5135ce3b8972ac2b52e76a7e04b356) | turnip: enable DEVICE_LOCAL-only memory type for RDR2 | Vulkan 1.4.362 |
 <!-- RECENT_BUILDS_END -->
 
 ---
