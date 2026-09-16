@@ -84,7 +84,8 @@ jobs:
               BODY=$(gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json body --jq '.body')
               if echo "$BODY" | grep -qi "$STEVEN_COMMIT"; then
                 echo "Match: our release $tag shares commit $STEVEN_COMMIT with Steven's $STEVEN_TAG"
-                if echo "$BODY" | grep -q "StevenMXZ"; then
+                # The body itself links StevenMXZ (A8xx provenance): look for the note, not the name.
+                if echo "$BODY" | grep -qF "Same Mesa commit as [StevenMXZ"; then
                   echo "Note already present, skipping"
                 else
                   printf '> ℹ️ **Same Mesa commit as [StevenMXZ %s](%s)**\n\n---\n\n%s' \
