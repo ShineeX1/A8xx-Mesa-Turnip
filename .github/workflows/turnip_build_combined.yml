@@ -11,6 +11,10 @@ on:
         description: "Full 40-hex Mesa commit to build (empty = mesa/mesa main HEAD)"
         type: string
         default: ""
+      simulate_wayland_failure:
+        description: "Dry runs only: fail this Wayland leg on purpose (regular / a8xx / 710-720-test) to test a partial release"
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -46,9 +50,9 @@ jobs:
           git init -q mesa
           git -C mesa remote add origin https://gitlab.freedesktop.org/mesa/mesa.git
           ok=0
-          for i in 1 2 3 4; do
+          for i in 1 2 3 4 5 6; do
             if git -C mesa fetch -q --depth=1 origin "$REF"; then ok=1; break; fi
-            echo "Mesa fetch attempt $i failed, retrying in 30 s"; sleep 30
+            echo "Mesa fetch attempt $i failed, retrying in 45 s"; sleep 45
           done
           [ "$ok" = 1 ] || { echo "::error::could not fetch Mesa $REF"; exit 1; }
           git -C mesa checkout -q FETCH_HEAD
@@ -98,6 +102,7 @@ jobs:
       - name: Upload release info
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: release-info
           path: release-info/
 
@@ -187,6 +192,7 @@ jobs:
       - name: Upload driver ZIP
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: turnip-${{ matrix.variant }}
           path: turnip_workdir/Turnip-*.zip
           if-no-files-found: error
@@ -194,6 +200,7 @@ jobs:
       - name: Upload verification report
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: report-android-${{ matrix.variant }}
           path: report-android-*.json
           if-no-files-found: error
@@ -230,7 +237,12 @@ jobs:
           EXTRA_PATCH: ${{ matrix.extra_patch }}
           EXTRA_SCRIPT: ${{ matrix.extra_script }}
           VARIANT: ${{ matrix.variant }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          SIMULATE_FAILURE: ${{ inputs.simulate_wayland_failure }}
         run: |
+          if [ "$DRY_RUN" = "true" ] && [ -n "$SIMULATE_FAILURE" ] && [ "$SIMULATE_FAILURE" = "$VARIANT" ]; then
+            echo "::error::simulated Wayland build failure for $VARIANT (dry-run test)"; exit 1
+          fi
           ccache -M 2G
           chmod +x build_turnip_wayland.sh
           ./build_turnip_wayland.sh
@@ -251,6 +263,7 @@ jobs:
       - name: Upload Wayland driver ZIP
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: turnip-wayland-${{ matrix.variant }}
           path: wayland_workdir/Turnip-*-Wayland.zip
           if-no-files-found: error
@@ -258,6 +271,7 @@ jobs:
       - name: Upload verification report
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: report-wayland-${{ matrix.variant }}
           path: report-wayland-*.json
           if-no-files-found: error
@@ -266,6 +280,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: wayland-failed-${{ matrix.variant }}
           path: |
             wayland_workdir/mesa/build-wayland/meson-logs/meson-log.txt
@@ -329,6 +344,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
+          retention-days: 7
           name: release-body
           path: |
             release_body.md
