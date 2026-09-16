@@ -14,6 +14,21 @@ repo         = os.environ["BT_REPO"]
 release_url = f"https://github.com/{repo}/releases/tag/{tag}"
 mesa_url    = f"https://gitlab.freedesktop.org/mesa/mesa/-/commit/{githash_f}"
 
+def release_downloads(tag):
+    """One README row naming the zips actually attached to this release, X11 and Wayland apart."""
+    try:
+        out = subprocess.run(["gh", "release", "view", tag, "--repo", repo, "--json", "assets"],
+                             capture_output=True, text=True, check=True).stdout
+        names = sorted(a["name"] for a in json.loads(out).get("assets", []) if a["name"].endswith(".zip"))
+    except Exception:  # noqa: BLE001
+        return ""
+    wayland = [n for n in names if n.endswith("-Wayland.zip")]
+    x11 = [n for n in names if n not in wayland]
+    if not names:
+        return ""
+    return (f"| **Downloads** | X11 / AdrenoTools: {len(x11)} ZIP{'s' if len(x11) != 1 else ''} · "
+            f"Bannerlator Wayland: {len(wayland)} ZIP{'s' if len(wayland) != 1 else ''} |\n")
+
 latest = (
     "| | |\n"
     "| :--- | :--- |\n"
@@ -23,6 +38,7 @@ latest = (
     f"| **Commit date** | {c_date} |\n"
     f"| **Commit title** | {c_title} |\n"
     f"| **Build date** | {build_date} |\n"
+    + release_downloads(tag) +
     f"| **Release** | [{tag}]({release_url}) |"
 )
 

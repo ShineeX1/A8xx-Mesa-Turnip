@@ -6,7 +6,7 @@
 [![Discord](https://img.shields.io/badge/Discord-Join%20Server-5865F2?logo=discord&logoColor=white)](https://discord.gg/n8S4G2WZQ4)
 
 
-> Automated, bleeding-edge builds of the [Mesa Turnip](https://docs.mesa3d.org/drivers/freedreno.html) Vulkan driver — compiled directly from the latest upstream Mesa commits and packaged for [AdrenoTools](https://github.com/K11MCH1/AdrenoToolsDrivers)-compatible apps on Qualcomm Adreno GPUs.
+> Automated, bleeding-edge builds of the [Mesa Turnip](https://docs.mesa3d.org/drivers/freedreno.html) Vulkan driver, compiled directly from the latest upstream Mesa commits. Every release ships each driver twice: for [AdrenoTools](https://github.com/K11MCH1/AdrenoToolsDrivers)-compatible apps (X11), and for Bannerlator Wayland containers.
 
 [![Build Turnip (Combined)](https://github.com/The412Banner/Banners-Turnip/actions/workflows/turnip_build_combined.yml/badge.svg?branch=A8xx)](https://github.com/The412Banner/Banners-Turnip/actions/workflows/turnip_build_combined.yml)
 [![Latest Release](https://img.shields.io/github/v/release/The412Banner/Banners-Turnip?label=latest%20release&color=blue)](https://github.com/The412Banner/Banners-Turnip/releases/latest)
@@ -17,16 +17,26 @@
 
 [Turnip](https://docs.mesa3d.org/drivers/freedreno.html) is the open-source Mesa Vulkan driver for Qualcomm Adreno GPUs — developed as part of the [Mesa](https://gitlab.freedesktop.org/mesa/mesa) project and maintained by the Freedreno community. Unlike the proprietary Qualcomm driver, Turnip is fully open-source and often ships fixes and feature support ahead of official Qualcomm releases.
 
-This repo automatically builds Turnip from the absolute latest commit on `mesa/main` — no waiting for official Mesa releases. A [Mesa upstream watcher](.github/workflows/mesa-watcher.yml) polls for new commits every hour and triggers a fresh build automatically whenever `mesa/main` advances. The result is an [AdrenoTools](https://github.com/K11MCH1/AdrenoToolsDrivers)-compatible ZIP you can drop straight into any compatible app (BannerHub/BCI, Winlator, etc.) to get the most up-to-date driver available.
+This repo automatically builds Turnip from the absolute latest commit on `mesa/main` — no waiting for official Mesa releases. A [Mesa upstream watcher](.github/workflows/mesa-watcher.yml) polls for new commits every hour and triggers a fresh build automatically whenever `mesa/main` advances. Each driver comes as two ZIPs from the same Mesa commit and patches:
+
+- an [AdrenoTools](https://github.com/K11MCH1/AdrenoToolsDrivers)-compatible ZIP you can drop straight into any compatible app (BannerHub/BCI, Winlator, Bannerlator X11, etc.);
+- a **Wayland** ZIP for Bannerlator Wayland containers.
 
 ---
 
 ## Driver Variants & Downloads
 
-Each release ships three drivers, each as two ZIPs built from the same Mesa commit and patches — pick the driver matching your GPU, then the ZIP matching your container:
+Each release ships three drivers, each as two ZIPs built from the same Mesa commit and patches. Pick the driver for your GPU, then the ZIP for where you use it:
 
-- **`Turnip-<tag>[-variant].zip`** — the Android / AdrenoTools driver: BannerHub/BCI, Winlator, and Bannerlator X11 containers.
-- **`Turnip-<tag>[-variant]-Wayland.zip`** — a Linux-style Vulkan ICD (KGSL, Wayland WSI) for **Bannerlator Wayland containers**: import it with *Import Wayland game driver (.zip)*. It does not load as an AdrenoTools driver. Built by [`build_turnip_wayland.sh`](build_turnip_wayland.sh); if a Wayland build fails, the release still ships and its notes say which one is missing.
+| Driver | GPUs | X11 / AdrenoTools ZIP | Bannerlator Wayland ZIP |
+| :--- | :--- | :--- | :--- |
+| **Standard** | Adreno 6xx / 7xx (Snapdragon 8 Gen 3 and older) | `Turnip-<tag>.zip` | `Turnip-<tag>-Wayland.zip` |
+| **A8xx** (experimental) | Adreno 810 / 825 / 829 / 830 / 840 (Snapdragon 8 Elite) | `Turnip-<tag>-A8xx.zip` | `Turnip-<tag>-A8xx-Wayland.zip` |
+| **A710 / A720 / A722** (experimental) | Adreno 710 / 720 / 722 | `Turnip-<tag>-710-720-Test.zip` | `Turnip-<tag>-710-720-Test-Wayland.zip` |
+
+- **X11 / AdrenoTools ZIP:** BannerHub/BCI, Winlator, Bannerlator X11 containers and any other AdrenoTools app.
+- **Wayland ZIP:** Bannerlator **Wayland containers** only. It's a Linux-style Vulkan driver (KGSL, Wayland, bionic) with Bannerlator's zero-copy patch, built by [`build_turnip_wayland.sh`](build_turnip_wayland.sh). It doesn't load as an AdrenoTools driver, and an X11 ZIP doesn't work as a Wayland game driver.
+- CI checks every ZIP before it's attached. If a Wayland build fails, the release still ships its X11 ZIPs and the release notes say which Wayland ZIP is missing.
 
 [**Download latest →**](https://github.com/The412Banner/Banners-Turnip/releases/latest) · [**Full build history →**](Mesa-commit-history.md)
 
@@ -40,15 +50,14 @@ Injects hardware-specific GPU entries and magic registers for Adreno 710, 720, a
 
 ### A8xx — Experimental
 
-Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830). Built from Mesa `main` with the following patches on top:
+Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830, A840). Built from Mesa `main` with the following on top (the same for the X11 and Wayland ZIPs):
 
 | Patch | What it does |
 | :--- | :--- |
-| `tu8_kgsl_26.patch` | 9 commits from [whitebelyash/mesa-tu8](https://github.com/whitebelyash/mesa-tu8): UBWC gralloc detection, `disable_gmem` GPU property, A8xx magic regs, A810/A825/A829/A830 GPU configs, gmem cache fixes |
-| `fix_a8xx_dev_info.py` | Re-adds `disable_gmem` to `freedreno_dev_info.h` and `tu_cmd_buffer.cc` — safeguard if the patch hunk drifts on a new Mesa commit |
-| `apply_a8xx_gpus.py` | Ensures A810/A825/A829 GPU entries are present in `freedreno_devices.py` — safeguard if the patch hunk drifts on a new Mesa commit |
+| [`a8xx_gen8.patch`](patches/a8xx_gen8.patch) | 13 commits from whitebelyash's [`turnip/gen8`](https://github.com/whitebelyash/mesa-unified) stack (as shipped in tu_v29 / StevenMXZ v33): A8xx GPU configs, UBWC gralloc detection, `disable_gmem` GPU property, Steam Deck spoof (`TU_DEBUG=deck_emu`), A810 fixes |
+| [`a8xx_shared_mem.py`](patches/a8xx_shared_mem.py) | `cs_shared_mem_size` 32 KiB → 64 KiB on every device entry |
 
-**Use at your own risk.**
+Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game won't start. **Use at your own risk.**
 
 ---
 
@@ -64,8 +73,8 @@ Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830). Built
 
 ## Installation
 
-- **BannerHub / BCI:** Component Manager → Add New Component → select the ZIP
-- **AdrenoTools-compatible apps (Winlator, Bannerlator X11, etc.):** load the ZIP in GPU driver settings
+- **BannerHub / BCI:** Component Manager → Add New Component → select the X11 / AdrenoTools ZIP
+- **AdrenoTools-compatible apps (Winlator, Bannerlator X11, etc.):** load the X11 / AdrenoTools ZIP in GPU driver settings
 - **Bannerlator Wayland containers:** *Import Wayland game driver (.zip)* → select the `-Wayland.zip`, then pick it as the container's Wayland game driver
 
 ---
@@ -81,6 +90,7 @@ Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830). Built
 | **Commit date** | 2026-09-16 |
 | **Commit title** | kraid: Check restricted fields during decoding |
 | **Build date** | 20260916 |
+| **Downloads** | X11 / AdrenoTools: 3 ZIPs · Bannerlator Wayland: 3 ZIPs |
 | **Release** | [v26.3.0-20260916-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r5) |
 <!-- LATEST_BUILD_END -->
 
@@ -133,7 +143,7 @@ You can fork this repo and get fully automated builds running with minimal setup
 
 4. **Keep the branch named `A8xx`** — The README auto-update step in `turnip_build_combined.yml` has `A8xx` hardcoded in four places (`git fetch/checkout/pull/push origin A8xx`). If you rename the branch, that step will fail and your README won't auto-update. Either keep the branch as `A8xx` or do a find-and-replace in `.github/workflows/turnip_build_combined.yml` to match your branch name.
 
-5. **Update cosmetic repo references** *(optional)* — A few strings in the workflows reference the original repo: patch links in release note bodies and `"author"` in `meta.json`. Search for `The412Banner` in `.github/workflows/` and update to your own username/repo if desired. These don't affect build functionality.
+5. **Update cosmetic repo references** *(optional)* — A few strings in the workflows reference the original repo: patch links in release note bodies and `"author"` in `meta.json`. Search for `The412Banner` in `.github/` and in `build_turnip*.sh`, and update to your own username/repo if desired. These don't affect build functionality.
 
 6. **Kick off your first build** — GitHub Actions schedules don't fire automatically on forks until the repo sees some activity. Manually trigger either:
    - **Mesa Upstream Watcher** → *Run workflow* — records the current Mesa HEAD and fires a combined build if it's new
