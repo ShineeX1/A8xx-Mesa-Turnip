@@ -23,7 +23,10 @@ This repo automatically builds Turnip from the absolute latest commit on `mesa/m
 
 ## Driver Variants & Downloads
 
-Each release ships three driver ZIPs — pick the one matching your GPU.
+Each release ships three drivers, each as two ZIPs built from the same Mesa commit and patches — pick the driver matching your GPU, then the ZIP matching your container:
+
+- **`Turnip-<tag>[-variant].zip`** — the Android / AdrenoTools driver: BannerHub/BCI, Winlator, and Bannerlator X11 containers.
+- **`Turnip-<tag>[-variant]-Wayland.zip`** — a Linux-style Vulkan ICD (KGSL, Wayland WSI) for **Bannerlator Wayland containers**: import it with *Import Wayland game driver (.zip)*. It does not load as an AdrenoTools driver. Built by [`build_turnip_wayland.sh`](build_turnip_wayland.sh); if a Wayland build fails, the release still ships and its notes say which one is missing.
 
 [**Download latest →**](https://github.com/The412Banner/Banners-Turnip/releases/latest) · [**Full build history →**](Mesa-commit-history.md)
 
@@ -53,7 +56,7 @@ Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830). Built
 
 | Workflow | Trigger | What it builds |
 | :--- | :--- | :--- |
-| **Build Turnip (Combined)** | Auto (mesa-watcher) or manual | Standard + A8xx + A710/A720/A722 in parallel; published as a single tagged release |
+| **Build Turnip (Combined)** | Auto (mesa-watcher) or manual | Standard + A8xx + A710/A720/A722, Android and Wayland builds in parallel from one Mesa commit; each ZIP is checked in CI, then published as a single tagged release with notes written from what built (manual runs can set `dry_run` to build and verify without publishing) |
 | **Build Turnip A8xx (Experimental)** | Manual | Standalone A8xx test build — faster iteration outside the release cycle |
 | **Build Turnip (Perf 6xx/7xx)** | Manual | A6xx/A7xx only, compiled with `-O3` + ThinLTO for performance testing |
 
@@ -62,7 +65,8 @@ Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830). Built
 ## Installation
 
 - **BannerHub / BCI:** Component Manager → Add New Component → select the ZIP
-- **AdrenoTools-compatible apps (Winlator, etc.):** load the ZIP in GPU driver settings
+- **AdrenoTools-compatible apps (Winlator, Bannerlator X11, etc.):** load the ZIP in GPU driver settings
+- **Bannerlator Wayland containers:** *Import Wayland game driver (.zip)* → select the `-Wayland.zip`, then pick it as the container's Wayland game driver
 
 ---
 

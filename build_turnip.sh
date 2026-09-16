@@ -60,6 +60,13 @@ prepare_workdir(){
 
 	echo "Downloading mesa source..."
 	git clone $mesasrc --depth=1 -b main $srcfolder
+
+	# The combined workflow pins every leg to the commit its resolve job chose (unset = main HEAD).
+	if [ -n "${MESA_COMMIT}" ] && [ "$(git -C $srcfolder rev-parse HEAD)" != "${MESA_COMMIT}" ]; then
+		echo "Mesa main has moved past ${MESA_COMMIT}; checking out that commit..."
+		git -C $srcfolder fetch --depth=1 origin "${MESA_COMMIT}"
+		git -C $srcfolder checkout -q FETCH_HEAD
+	fi
 }
 
 build_lib_for_android(){
