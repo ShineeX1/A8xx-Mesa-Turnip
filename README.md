@@ -73,11 +73,11 @@ Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830). Built
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.362 |
-| **Commit** | [`2846d7e`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/2846d7e13d9dce17e2441ca3f168f34d1e918fd5) |
+| **Commit** | [`e84389c`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/e84389c8d594c258e9330229a8bddd182c81b93a) |
 | **Commit date** | 2026-09-16 |
-| **Commit title** | radeonsi: wait for graphics shaders differently on GFX10-11.7 |
+| **Commit title** | d3d12: scope AV1 film grain output redirect to reference-only configs |
 | **Build date** | 20260916 |
-| **Release** | [v26.3.0-20260916-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r3) |
+| **Release** | [v26.3.0-20260916-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r4) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -87,6 +87,7 @@ Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830). Built
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260916-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r4) | 2026-09-16 | [`e84389c`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/e84389c8d594c258e9330229a8bddd182c81b93a) | d3d12: scope AV1 film grain output redirect to reference-only configs | Vulkan 1.4.362 |
 | [v26.3.0-20260916-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r3) | 2026-09-16 | [`2846d7e`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/2846d7e13d9dce17e2441ca3f168f34d1e918fd5) | radeonsi: wait for graphics shaders differently on GFX10-11.7 | Vulkan 1.4.362 |
 | [v26.3.0-20260916-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r2) | 2026-09-16 | [`848eb4f`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/848eb4f3153e8f03d382b5145ea45068a11971d9) | v3dv: remove render pass fields from pipeline | Vulkan 1.4.362 |
 | [v26.3.0-20260916](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916) | 2026-09-16 | [`9df9c70`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/9df9c70f17214c4f04843d2b180ce03f8c3eef4a) | intel/brw/xe3+: Consider trivial scheduling heuristic in pre-RA scheduling pass. | Vulkan 1.4.362 |
