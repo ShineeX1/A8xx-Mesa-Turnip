@@ -151,244 +151,93 @@ def main():
 
     L = []
     w = L.append
-    android_ok = [d for d in DRIVERS if legs[(d["variant"], "android")]["ok"]]
     android_bad = [d for d in DRIVERS if not legs[(d["variant"], "android")]["ok"]]
     wayland_bad = [d for d in DRIVERS if not legs[(d["variant"], "wayland")]["ok"]]
 
-    w("> ⚠️ **AUTOMATED BUILD — Not guaranteed stable. Use at your own risk.**")
-    w("> Built and checked by CI from the Mesa commit below. **Not tested on a device.**")
+    w("> ⚠️ **Automated build** from Mesa `main`: checked by CI, **not tested on a device.**")
     w("")
-    if android_bad:
-        w(f"> ⚠️ **Partial release — {len(android_ok)} of 3 Android drivers.** These failed this run and are NOT included:")
-        for d in android_bad:
-            leg = legs[(d["variant"], "android")]
-            w(f"> - {d['label']} (`{leg['name']}`): {leg['why']}")
+    for d in android_bad:
+        leg = legs[(d["variant"], "android")]
+        why = "" if leg["why"] == "did not build" else f" ({leg['why']})"
+        w(f"> ❌ **{d['label']}** didn't build this run{why}, so it isn't included.")
         w("")
     for d in wayland_bad:
+        if not legs[(d["variant"], "android")]["ok"]:
+            continue
         leg = legs[(d["variant"], "wayland")]
-        also = " The Android zip of this driver is not affected." if legs[(d["variant"], "android")]["ok"] else ""
-        w(f"> ⚠️ **Wayland build of {d['label']} failed this run** (`{leg['name']}`: {leg['why']}) and is NOT included.{also}")
+        why = "" if leg["why"] == "did not build" else f" ({leg['why']})"
+        w(f"> ❌ The **Wayland** build of **{d['label']}** didn't build this run{why}. Its X11 zip is fine.")
         w("")
-    w("---")
-    w("")
-    w("### Mesa Upstream")
-    w("")
-    w("| | |")
+
+    # Keep these three rows: update_readme.py reads Commit / Commit title / Vulkan version from past bodies.
+    w("| Mesa | |")
     w("| :--- | :--- |")
-    w(f"| **Version** | {info['mesa_version']} |")
     w(f"| **Commit** | [`{info['githash']}`]({mesa_url}) |")
-    w(f"| **Vulkan version** | {info['vulkan_version']} |")
-    w(f"| **Commit date** | {info['commit_date']} |")
     w(f"| **Commit title** | {md_cell(info['commit_title'])} |")
-    w(f"| **Build date** | {info['build_date']} |")
+    w(f"| **Vulkan version** | {info['vulkan_version']} |")
+    w(f"| **Date** | {info['commit_date']} |")
     w("")
-    w("Every driver in this release, Android and Wayland, is built from this one commit.")
+    w("### Downloads")
     w("")
-    w("---")
-    w("")
-    w("### Which file?")
-    w("")
-    w("| Driver | GPUs | Android zip (X11 / AdrenoTools) | Wayland zip (Bannerlator Wayland) |")
+    w("| Driver | GPUs | X11 / AdrenoTools | Bannerlator Wayland |")
     w("| :--- | :--- | :--- | :--- |")
 
     def cell(variant, platform):
         leg = legs[(variant, platform)]
-        return f"`{leg['name']}`" if leg["ok"] else "❌ failed this run"
+        return f"`{leg['name']}`" if leg["ok"] else "❌ not built"
 
+    short = {
+        "regular": ("**Standard**", "Adreno 6xx / 7xx (8 Gen 3 and older)"),
+        "a8xx": ("**A8xx** (experimental)", "Adreno 810 / 825 / 829 / 830 / 840 (8 Elite)"),
+        "710-720-test": ("**A710 / A720 / A722** (experimental, untested on hardware)", "Adreno 710 / 720 / 722"),
+    }
     for d in DRIVERS:
-        w(f"| **{d['label']}** ({d['kind']}) | {d['gpus']} | {cell(d['variant'], 'android')} | {cell(d['variant'], 'wayland')} |")
+        label, gpus = short[d["variant"]]
+        w(f"| {label} | {gpus} | {cell(d['variant'], 'android')} | {cell(d['variant'], 'wayland')} |")
     w("")
-    w("- **Android zip** → Bannerlator / Winlator (or any AdrenoTools app): import it as a **GPU driver**. "
-      "This is the driver for X11 containers.")
-    w("- **Wayland zip** → Bannerlator **Wayland containers** only: **Import Wayland game driver (.zip)**, then pick it "
-      "as the container's Wayland game driver. It is a Linux-style Vulkan ICD: it does not load as an AdrenoTools "
-      "driver, and an Android zip does not work as a Wayland game driver.")
+    w("**Which one?**")
+    w("- **X11** (Bannerlator, Winlator, BannerHub, any AdrenoTools app): import the normal zip as a GPU driver. "
+      "Not sure which driver? Use **Standard**.")
+    w("- **Bannerlator Wayland containers:** *Import Wayland game driver (.zip)*, then pick the `-Wayland` zip.")
     w("")
-    w("---")
-    w("")
-
-    def gpu_line(variant, prefix_re, what):
-        names = set()
-        for platform in ("android", "wayland"):
-            leg = legs[(variant, platform)]
-            if leg["ok"]:
-                names |= {n for n in leg["report"].get("gpu_names", []) if re.match(prefix_re, n)}
-        if names:
-            w(f"{what} in this build: " + ", ".join(f"`{n}`" for n in sorted(names)) + ".")
-            w("")
-
-    # --- A6xx / A7xx
-    w("### A6xx / A7xx — Standard")
-    w("")
-    w("The everyday driver for most Adreno phones — **Snapdragon 600–800 series** (7 Gen, 8 Gen 1–3). Built straight "
-      "from the latest upstream Mesa with no extra patches, so it's the safest, most-compatible pick. Not sure which "
-      "file to grab? It's this one.")
-    w("")
-    w("<details>")
-    w("<summary>Technical details</summary>")
-    w("")
-    w("Pure Mesa `main` at the commit above, no source patches. The Android build applies three inline NDK r29 "
-      "compatibility fixes at build time:")
-    w("")
-    w("- `buffer_handle_t` typedef fix (`native_handle.h`)")
-    w("- `hnd->handle` void-cast fix (`u_gralloc_fallback.c`)")
-    w("- `native_buffer->handle` cast fix (`vk_android.c`)")
-    w("")
-    w("The Wayland build adds only the Wayland build changes listed under **Wayland builds** below.")
-    w("")
-    w("</details>")
-    w("")
-    w("---")
+    w("**Tips:** A8xx: `TU_DEBUG=sysmem` if an A830 looks glitchy, `TU_DEBUG=deck_emu` if a game won't start. "
+      "A710 / A720 / A722: `TU_DEBUG=sysmem` (in Winlator also `WRAPPER_BLIT=1`).")
     w("")
 
-    # --- A8xx
     a8 = legs[("a8xx", "android")]["report"] or legs[("a8xx", "wayland")]["report"] or {}
     a8_patch = a8.get("extra_patch") or "patches/a8xx_gen8.patch"
-    a8_scripts = [s for s in (a8.get("extra_script") or "patches/a8xx_shared_mem.py").split(":") if s]
-    commits = patch_commits(os.path.join(a.workdir, a8_patch))
-    w("### A8xx — Snapdragon 8 Elite")
-    w("")
-    w("For the newest **Snapdragon 8 Elite** phones — **Adreno 840 / 830 / 829 / 825 / 810**. whitebelyash's "
-      "`turnip/gen8` A8xx stack (as shipped in [tu_v29](https://github.com/whitebelyash/AdrenoToolsDrivers/releases/tag/tu_v29) "
-      "and [StevenMXZ v33](https://github.com/StevenMXZ/Adreno-Tools-Drivers/releases/tag/v33)), rebuilt on the latest "
-      "Mesa. Still experimental, so a couple of tips:")
-    w("")
-    w("- **A830 looking glitchy?** Add `TU_DEBUG=sysmem` to your environment.")
-    w("- **A game won't start on Qualcomm?** Try `TU_DEBUG=deck_emu` (spoofs a Steam Deck).")
-    w("")
-    w("<details>")
-    w("<summary>Technical details — patches and provenance</summary>")
-    w("")
-    gpu_line("a8xx", r"^Adreno \(TM\) 8", "Adreno 8xx entries")
-    patch_url = REPO_BLOB.format(repo=a.repo, ref=a.ref, path=a8_patch)
-    if commits:
-        w(f"**[{os.path.basename(a8_patch)}]({patch_url}) — {len(commits)} commits** from "
-          "[whitebelyash/mesa-unified](https://github.com/whitebelyash/mesa-unified) `turnip/gen8`:")
-        w("")
-        for subj, author in commits:
-            w(f"- {md_cell(subj)} — *{md_cell(author)}*")
-        w("")
-    for s in a8_scripts:
-        s_url = REPO_BLOB.format(repo=a.repo, ref=a.ref, path=s)
-        if os.path.basename(s) == "a8xx_shared_mem.py":
-            w(f"Plus [`a8xx_shared_mem.py`]({s_url}): `cs_shared_mem_size` 32 KiB → 64 KiB on every device entry in "
-              "`freedreno_devices.py` (whitebelyash's \"increase shared mem size\" commit).")
-        else:
-            w(f"Plus [`{os.path.basename(s)}`]({s_url}).")
-        w("")
-    try:
-        if "force_render_mode_reason" in open(os.path.join(a.workdir, a8_patch), errors="replace").read():
-            w("**Banners-Turnip local delta:** the series' `disable_gmem` hunk uses `force_render_mode_reason` "
-              "(Mesa's current name for `gmem_disable_reason`) so it builds against current Mesa `main`.")
-            w("")
-    except OSError:
-        pass
-    w("</details>")
-    w("")
-    w("---")
-    w("")
-
-    # --- 710/720/722
+    a8_scripts = [x for x in (a8.get("extra_script") or "patches/a8xx_shared_mem.py").split(":") if x]
+    a8_commits = patch_commits(os.path.join(a.workdir, a8_patch))
     t7 = legs[("710-720-test", "android")]["report"] or legs[("710-720-test", "wayland")]["report"] or {}
-    t7_scripts = [s for s in (t7.get("extra_script") or "patches/a710-720.py").split(":") if s]
-    w("### A710 / A720 / A722 — Experimental")
-    w("")
-    w("An experimental test build with its own **Adreno 710 / 720 / 722** entries: tuned GPU properties and magic "
-      "registers from hardware traces, replacing any upstream entry for those chip IDs. ⚠️ **Not yet verified on "
-      "real hardware.** If you try it:")
-    w("")
-    w("- Set `TU_DEBUG=sysmem` in your emulator/app environment.")
-    w("- **Winlator users:** also set `WRAPPER_BLIT=1`.")
-    w("")
-    w("It only activates on those chip IDs; the standard zip is not affected.")
-    w("")
-    w("<details>")
-    w("<summary>Technical details</summary>")
-    w("")
-    gpu_line("710-720-test", r"^FD7(10|20|22)$", "A710/A720/A722 entries")
-    for s in t7_scripts:
-        s_url = REPO_BLOB.format(repo=a.repo, ref=a.ref, path=s)
-        src = ""
-        try:
-            src = open(os.path.join(a.workdir, s), errors="replace").read()
-        except OSError:
-            pass
-        ids = [(g, c) for g, c in (("A710", "0x07010000"), ("A720", "0x43020000"), ("A722", "0x43020100")) if c in src]
-        w(f"Pure Mesa `main` plus [`{os.path.basename(s)}`]({s_url}) (from [Vauzi-17/710](https://github.com/Vauzi-17/710)), "
-          "which writes those per-GPU entries into `freedreno_devices.py`"
-          + (": " + ", ".join(f"**{g}** (`{c}`)" for g, c in ids) if ids else "") + ".")
-        w("")
-    w("</details>")
-    w("")
-    w("---")
-    w("")
+    t7_scripts = [x for x in (t7.get("extra_script") or "patches/a710-720.py").split(":") if x]
 
-    # --- Wayland
-    wl_reports = [legs[(d["variant"], "wayland")]["report"] for d in DRIVERS if legs[(d["variant"], "wayland")]["ok"]]
-    w("### Wayland builds")
+    def link(path):
+        return f"[`{os.path.basename(path)}`]({REPO_BLOB.format(repo=a.repo, ref=a.ref, path=path)})"
+
+    w("<details>")
+    w("<summary>Build details and checksums</summary>")
     w("")
-    if not wl_reports:
-        w("No Wayland build succeeded this run, so this release has no `-Wayland.zip` files.")
-        w("")
-    else:
-        w("The `-Wayland.zip` files are the same drivers — same Mesa commit, same per-driver patches and scripts as the "
-          "Android zips — built the way the Turnips in Bannerlator's Wayland Proton layer are built: a Linux-style Vulkan "
-          "ICD on bionic that the Vulkan loader inside the Wine container loads. Each zip holds "
-          "`libvulkan_freedreno.so`, the `libdrm.so` it was linked against, and `meta.json`.")
-        w("")
-        r0 = wl_reports[0]
-        termux = r0.get("termux", {})
-        wp = r0.get("wayland_patches", {})
-        kgsl = {r.get("wayland_patches", {}).get("kgsl_wait_assert") for r in wl_reports}
-        w("<details>")
-        w("<summary>Technical details</summary>")
-        w("")
-        w(f"- NDK {r0.get('ndk', '?').replace('android-ndk-', '')}, API {r0.get('api', '?')}, "
-          "`-Dplatforms=wayland -Dfreedreno-kmds=msm,kgsl`, Turnip target only, not stripped.")
-        w(f"- Linked against Termux libwayland {termux.get('libwayland', '?')} and libdrm {termux.get('libdrm', '?')}. "
-          "`libwayland-client.so` comes from Bannerlator's Wayland layer.")
-        w("- Wayland-only source changes on top of each driver's recipe:")
-        w("  - Mesa's Android detection off (a Linux-style build on bionic, like Termux's Mesa)")
-        w("  - `no_pthread_cancel.py`: bionic has no `pthread_cancel` (VK_KHR_display WSI threads)")
-        if kgsl == {"applied"}:
-            w("  - KGSL timestamp wait: a warning instead of an assert on an unexpected errno")
-        elif kgsl == {"not-found"}:
-            w("  - KGSL timestamp wait: no change needed (Mesa no longer has that assert)")
-        w(f"  - `banner_ahb_wsi.py`: Bannerlator zero-copy presentation (`banner_ahb_v1`: swapchain images on gralloc "
-          f"buffers, UBWC where the device allows), from {wp.get('source', 'the wayland branch')}")
-        w("- CI checks every Wayland zip before attaching it: bionic `libc.so` + `libwayland-client.so` + `libdrm.so` "
-          "linked and no libhardware / libnativewindow / libsync / glibc, `vk_icdGetInstanceProcAddr` exported, `wl_` "
-          "symbols present, every libwayland-client / libdrm symbol it imports present in the versions Bannerlator's "
-          "Wayland layer ships, and the zip layout Bannerlator's Wayland game driver import takes.")
-        w("")
-        w("| Wayland zip | NEEDED | `vk_icdGetInstanceProcAddr` | `wl_` symbols |")
-        w("| :--- | :--- | :--- | :--- |")
-        for r in wl_reports:
-            exported = "exported" if "vk_icdGetInstanceProcAddr" in r.get("vk_icd_exports", []) else "missing"
-            w(f"| `{r['zip']}` | `{' '.join(r.get('needed', []))}` | {exported} | {r.get('wl_symbols', 0)} |")
-        w("")
-        w("</details>")
-        w("")
-    w("---")
+    w("- **Standard:** plain Mesa `main`, no patches.")
+    a8_desc = f"whitebelyash's `turnip/gen8` stack ({link(a8_patch)}"
+    a8_desc += f", {len(a8_commits)} commits)" if a8_commits else ")"
+    if a8_scripts:
+        a8_desc += " + " + ", ".join(link(x) for x in a8_scripts)
+    w(f"- **A8xx:** {a8_desc}.")
+    w(f"- **A710 / A720 / A722:** " + ", ".join(link(x) for x in t7_scripts)
+      + " from [Vauzi-17/710](https://github.com/Vauzi-17/710).")
+    w("- **Wayland zips:** the same commit and patches, built as Linux-style Vulkan drivers (KGSL, Wayland, bionic) "
+      "with Bannerlator's zero-copy patch. CI checks each one before it is attached. They don't load as AdrenoTools "
+      "drivers, and the X11 zips don't work as Wayland game drivers.")
     w("")
-    w("### Files")
-    w("")
-    w("| File | Size | SHA-256 |")
-    w("| :--- | :--- | :--- |")
+    w("| File | SHA-256 |")
+    w("| :--- | :--- |")
     for d in DRIVERS:
         for platform in ("android", "wayland"):
             leg = legs[(d["variant"], platform)]
             if leg["ok"]:
-                w(f"| `{leg['name']}` | {mib(leg['size'])} | `{leg['report']['sha256']}` |")
+                w(f"| `{leg['name']}` | `{leg['report']['sha256']}` |")
     w("")
-    w("---")
-    w("")
-    w("### Installation")
-    w("")
-    w("- **Bannerlator / Winlator / AdrenoTools apps (X11):** load the **Android** ZIP in GPU driver settings")
-    w("- **BannerHub / BCI:** Component Manager → Add New Component → select the **Android** ZIP")
-    w("- **Bannerlator Wayland containers:** **Import Wayland game driver (.zip)** → select the **Wayland** ZIP, then pick "
-      "it as the container's Wayland game driver")
+    w("</details>")
 
     with open(a.out, "w") as f:
         f.write("\n".join(L) + "\n")
