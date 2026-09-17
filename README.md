@@ -86,12 +86,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.362 |
-| **Commit** | [`466be35`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/466be351a83661be160682d33bd52a058b7d0c90) |
+| **Commit** | [`03f434a`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/03f434abd4fef66ced55cb937a72ec8aa512511a) |
 | **Commit date** | 2026-09-17 |
-| **Commit title** | radv: Avoid some VALU during ray traversal |
+| **Commit title** | vc4: skip draws whose clip window is empty |
 | **Build date** | 20260917 |
 | **Downloads** | X11 / AdrenoTools: 3 ZIPs · Bannerlator Wayland: 3 ZIPs |
-| **Release** | [v26.3.0-20260917-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260917-r3) |
+| **Release** | [v26.3.0-20260917-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260917-r4) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -101,13 +101,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260917-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260917-r4) | 2026-09-17 | [`03f434a`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/03f434abd4fef66ced55cb937a72ec8aa512511a) | vc4: skip draws whose clip window is empty | Vulkan 1.4.362 |
 | [v26.3.0-20260917-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260917-r3) | 2026-09-17 | [`466be35`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/466be351a83661be160682d33bd52a058b7d0c90) | radv: Avoid some VALU during ray traversal | Vulkan 1.4.362 |
 | [v26.3.0-20260917-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260917-r2) | 2026-09-17 | [`e36f69d`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/e36f69d1587584f34ad151ebb1e0d1fdad37e219) | pan/kmod: dummy BO is per VM for emulated sparse | Vulkan 1.4.362 |
 | [v26.3.0-20260917](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260917) | 2026-09-17 | [`8a97554`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/8a97554c54ce748347df0030351603e25d4abdda) | lavapipe: handle planar views as rendering attachments | Vulkan 1.4.362 |
 | [v26.3.0-20260916-r7](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r7) | 2026-09-16 | [`a6bb6e5`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/a6bb6e52b7ced637177b5bc79da049df0f0659b7) | anv: Use anv_cmd_buffer_alloc_space for encode batch | Vulkan 1.4.362 |
 | [v26.3.0-20260916-r6](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r6) | 2026-09-16 | [`23a3d63`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/23a3d631806f4ed8ffab6b45381ea70b6faa74a6) | anv: respect bit_size/num_component from the IR with acceleration structures | Vulkan 1.4.362 |
-| [v26.3.0-20260916-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r5) | 2026-09-16 | [`06a6743`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/06a6743aacc17b08b612e0f85c1ecb6c841034dd) | kraid: Check restricted fields during decoding | Vulkan 1.4.362 |
-| [v26.3.0-20260916-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r4) | 2026-09-16 | [`e84389c`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/e84389c8d594c258e9330229a8bddd182c81b93a) | d3d12: scope AV1 film grain output redirect to reference-only configs | Vulkan 1.4.362 |
 <!-- RECENT_BUILDS_END -->
 
 ---

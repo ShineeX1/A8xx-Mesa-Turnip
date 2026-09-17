@@ -5,6 +5,7 @@ A complete log of every Banners-Turnip release — newest first. Each entry link
 <!-- BUILDS_TABLE_START -->
 | Tag | Date | Mesa Commit | Commit Title | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260917-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260917-r4) | 2026-09-17 | [`03f434a`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/03f434abd4fef66ced55cb937a72ec8aa512511a) | vc4: skip draws whose clip window is empty | Vulkan 1.4.362 |
 | [v26.3.0-20260917-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260917-r3) | 2026-09-17 | [`466be35`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/466be351a83661be160682d33bd52a058b7d0c90) | radv: Avoid some VALU during ray traversal | Vulkan 1.4.362 |
 | [v26.3.0-20260917-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260917-r2) | 2026-09-17 | [`e36f69d`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/e36f69d1587584f34ad151ebb1e0d1fdad37e219) | pan/kmod: dummy BO is per VM for emulated sparse | Vulkan 1.4.362 |
 | [v26.3.0-20260917](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260917) | 2026-09-17 | [`8a97554`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/8a97554c54ce748347df0030351603e25d4abdda) | lavapipe: handle planar views as rendering attachments | Vulkan 1.4.362 |
