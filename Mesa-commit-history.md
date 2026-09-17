@@ -5,6 +5,7 @@ A complete log of every Banners-Turnip release — newest first. Each entry link
 <!-- BUILDS_TABLE_START -->
 | Tag | Date | Mesa Commit | Commit Title | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260917](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260917) | 2026-09-17 | [`8a97554`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/8a97554c54ce748347df0030351603e25d4abdda) | lavapipe: handle planar views as rendering attachments | Vulkan 1.4.362 |
 | [v26.3.0-20260916-r7](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r7) | 2026-09-16 | [`a6bb6e5`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/a6bb6e52b7ced637177b5bc79da049df0f0659b7) | anv: Use anv_cmd_buffer_alloc_space for encode batch | Vulkan 1.4.362 |
 | [v26.3.0-20260916-r6](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r6) | 2026-09-16 | [`23a3d63`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/23a3d631806f4ed8ffab6b45381ea70b6faa74a6) | anv: respect bit_size/num_component from the IR with acceleration structures | Vulkan 1.4.362 |
 | [v26.3.0-20260916-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260916-r5) | 2026-09-16 | [`06a6743`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/06a6743aacc17b08b612e0f85c1ecb6c841034dd) | kraid: Check restricted fields during decoding | Vulkan 1.4.362 |
