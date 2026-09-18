@@ -5,6 +5,7 @@ A complete log of every Banners-Turnip release — newest first. Each entry link
 <!-- BUILDS_TABLE_START -->
 | Tag | Date | Mesa Commit | Commit Title | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260918-r6](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260918-r6) | 2026-09-18 | [`590bf21`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/590bf21d918c86908d96d1f4590ecd25b9657171) | anv: implement VK_INTEL_device_info | Vulkan 1.4.363 |
 | [v26.3.0-20260918-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260918-r5) | 2026-09-18 | [`1a63ca3`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/1a63ca3af985f70eeaf19233bb605c4a1dfe1b09) | pan/nir: Optimize Cubemaps on v11+ | Vulkan 1.4.363 |
 | [v26.3.0-20260918-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260918-r4) | 2026-09-18 | [`af4ef6b`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/af4ef6b98b8d96bd9accd019963ef0169a8b004f) | panfrost: Make BO label/flags update threadsafe | Vulkan 1.4.363 |
 | [v26.3.0-20260918-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260918-r3) | 2026-09-18 | [`2bd8a61`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/2bd8a61d93f4e2955a7058fd16a17fbca0a454e9) | kraid: Warn on dead code | Vulkan 1.4.363 |
