@@ -86,12 +86,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.363 |
-| **Commit** | [`af4ef6b`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/af4ef6b98b8d96bd9accd019963ef0169a8b004f) |
+| **Commit** | [`1a63ca3`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/1a63ca3af985f70eeaf19233bb605c4a1dfe1b09) |
 | **Commit date** | 2026-09-18 |
-| **Commit title** | panfrost: Make BO label/flags update threadsafe |
+| **Commit title** | pan/nir: Optimize Cubemaps on v11+ |
 | **Build date** | 20260918 |
 | **Downloads** | X11 / AdrenoTools: 3 ZIPs · Bannerlator Wayland: 3 ZIPs |
-| **Release** | [v26.3.0-20260918-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260918-r4) |
+| **Release** | [v26.3.0-20260918-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260918-r5) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -101,12 +101,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260918-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260918-r5) | 2026-09-18 | [`1a63ca3`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/1a63ca3af985f70eeaf19233bb605c4a1dfe1b09) | pan/nir: Optimize Cubemaps on v11+ | Vulkan 1.4.363 |
 | [v26.3.0-20260918-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260918-r4) | 2026-09-18 | [`af4ef6b`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/af4ef6b98b8d96bd9accd019963ef0169a8b004f) | panfrost: Make BO label/flags update threadsafe | Vulkan 1.4.363 |
 | [v26.3.0-20260918-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260918-r3) | 2026-09-18 | [`2bd8a61`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/2bd8a61d93f4e2955a7058fd16a17fbca0a454e9) | kraid: Warn on dead code | Vulkan 1.4.363 |
 | [v26.3.0-20260918-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260918-r2) | 2026-09-18 | [`df634b7`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/df634b7c2bc9133fa9ad32d005aa4a5cab29fa4f) | compiler: add UINT16 sampler and image types | Vulkan 1.4.362 |
 | [v26.3.0-20260918](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260918) | 2026-09-18 | [`51dd427`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/51dd427e3960215c5f9f9e37c7d1badae9af6671) | nv30: Fix for loops in fragment shaders on nv40 | Vulkan 1.4.362 |
 | [v26.3.0-20260917-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260917-r5) | 2026-09-17 | [`f63d087`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f63d0870611a629cea1e23b8bab39fc79b05357a) | ac/gpu_info, radeonsi, radv: allow initialization without GFX or compute queues | Vulkan 1.4.362 |
-| [v26.3.0-20260917-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260917-r4) | 2026-09-17 | [`03f434a`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/03f434abd4fef66ced55cb937a72ec8aa512511a) | vc4: skip draws whose clip window is empty | Vulkan 1.4.362 |
 <!-- RECENT_BUILDS_END -->
 
 ---
