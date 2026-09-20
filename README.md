@@ -86,12 +86,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.363 |
-| **Commit** | [`e1f3f37`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/e1f3f372c4a661cd0e71a0cdafc4d469d56ecf35) |
-| **Commit date** | 2026-09-19 |
-| **Commit title** | nv30: port fix from nv30_validate_fb to nv40 blit copy |
-| **Build date** | 20260919 |
+| **Commit** | [`3e7549d`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/3e7549d1a2fedaba560b56a91d73f16d54bfbef9) |
+| **Commit date** | 2026-09-20 |
+| **Commit title** | radv: fix checking whether a FS is present |
+| **Build date** | 20260920 |
 | **Downloads** | X11 / AdrenoTools: 3 ZIPs · Bannerlator Wayland: 3 ZIPs |
-| **Release** | [v26.3.0-20260919](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260919) |
+| **Release** | [v26.3.0-20260920](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260920) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -101,6 +101,7 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260920](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260920) | 2026-09-20 | [`3e7549d`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/3e7549d1a2fedaba560b56a91d73f16d54bfbef9) | radv: fix checking whether a FS is present | Vulkan 1.4.363 |
 | [v26.3.0-20260919](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260919) | 2026-09-19 | [`e1f3f37`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/e1f3f372c4a661cd0e71a0cdafc4d469d56ecf35) | nv30: port fix from nv30_validate_fb to nv40 blit copy | Vulkan 1.4.363 |
 <!-- RECENT_BUILDS_END -->
 
