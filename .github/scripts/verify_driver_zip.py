@@ -53,7 +53,10 @@ LINUX_NEEDED_ALLOWED = LINUX_NEEDED_REQUIRED | {
     "libm.so.6", "libdl.so.2", "libpthread.so.0", "librt.so.1", "libstdc++.so.6", "libgcc_s.so.1",
     "libz.so.1", "libzstd.so.1", "libexpat.so.1", "libxcb-dri3.so.0", "libxcb-present.so.0",
     "libxcb-shm.so.0", "libxcb-sync.so.1", "libxcb-xfixes.so.0", "libxcb-randr.so.0",
-    "libxcb-dri2.so.0", "libX11-xcb.so.1", "libxshmfence.so.1", "libatomic.so.1"}
+    "libxcb-dri2.so.0", "libX11-xcb.so.1", "libxshmfence.so.1", "libatomic.so.1",
+    # Arch's libc.so is a linker script that names the dynamic loader AS_NEEDED, so a glibc build
+    # against that sysroot carries it as a DT_NEEDED entry. Normal, and it is the loader itself.
+    "ld-linux-aarch64.so.1"}
 # Anything from the Android side means the build picked up the wrong sysroot.
 LINUX_NEEDED_FORBIDDEN = {"libc.so", "libm.so", "libdl.so", "liblog.so", "libsync.so",
                           "libhardware.so", "libnativewindow.so", "libc++_shared.so", "libz.so"}
