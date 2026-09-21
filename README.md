@@ -91,12 +91,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.363 |
-| **Commit** | [`366b006`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/366b006cfdb5aee1093271f4e58564f7394569ad) |
-| **Commit date** | 2026-09-20 |
-| **Commit title** | etnaviv: Move magnification switch-over for shader LODs |
+| **Commit** | [`69d5296`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/69d5296c0cdc41b1440b4186f13740526a0f8fa9) |
+| **Commit date** | 2026-09-21 |
+| **Commit title** | radv: remove a very old way to import RadeonSI images |
 | **Build date** | 20260921 |
 | **Downloads** | X11 / AdrenoTools: 3 ZIPs · Bannerlator Wayland: 3 ZIPs · Linux runtime: 3 ZIPs |
-| **Release** | [v26.3.0-20260921](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921) |
+| **Release** | [v26.3.0-20260921-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921-r2) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -106,6 +106,7 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260921-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921-r2) | 2026-09-21 | [`69d5296`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/69d5296c0cdc41b1440b4186f13740526a0f8fa9) | radv: remove a very old way to import RadeonSI images | Vulkan 1.4.363 |
 | [v26.3.0-20260921](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921) | 2026-09-21 | [`366b006`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/366b006cfdb5aee1093271f4e58564f7394569ad) | etnaviv: Move magnification switch-over for shader LODs | Vulkan 1.4.363 |
 | [v26.3.0-20260920-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260920-r2) | 2026-09-20 | [`e46ee71`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/e46ee71b43b1693a2baf22740b0157e7d31b79cc) | mesa/eval: Fix wrong auto-normal direction with reversed parameter ranges | Vulkan 1.4.363 |
 | [v26.3.0-20260920](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260920) | 2026-09-20 | [`3e7549d`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/3e7549d1a2fedaba560b56a91d73f16d54bfbef9) | radv: fix checking whether a FS is present | Vulkan 1.4.363 |
