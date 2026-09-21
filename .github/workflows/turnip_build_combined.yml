@@ -15,6 +15,10 @@ on:
         description: "Dry runs only: fail this Wayland leg on purpose (regular / a8xx / 710-720-test) to test a partial release"
         type: string
         default: ""
+      simulate_linux_failure:
+        description: "Dry runs only: fail this Linux leg on purpose (regular / a8xx / 710-720-test) to test a partial release"
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -288,11 +292,97 @@ jobs:
             wayland_workdir/termux-versions.txt
           if-no-files-found: ignore
 
+  # Linux (glibc ICD) builds of the same three drivers for Bannerlator's Linux runtime: the driver
+  # that draws the native ARM64 Steam client and the games it launches. Independent of the other
+  # legs: a failure here only drops that one zip.
+  linux:
+    runs-on: ubuntu-24.04
+    needs: resolve
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include: *drivers
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build unzip flex bison cmake glslang-tools curl pkg-config \
+            gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu \
+            python3-pip zip patch tar zstd xz-utils
+          # Ubuntu ships meson 1.3; Mesa 26.x needs >= 1.4, so take it from pip.
+          pip3 install --break-system-packages 'meson>=1.5' mako pyyaml packaging
+          meson --version && aarch64-linux-gnu-gcc --version | head -1
+
+      - name: Build (Linux)
+        env:
+          MESA_COMMIT: ${{ needs.resolve.outputs.commit }}
+          ZIP_NAME: Turnip-${{ needs.resolve.outputs.tag }}${{ matrix.suffix }}-Linux.zip
+          META_NAME: Mesa Turnip ${{ needs.resolve.outputs.tag }}${{ matrix.suffix }}-Linux
+          PACKAGE_VERSION: ${{ needs.resolve.outputs.day_num }}
+          META_DESC: ${{ matrix.meta_desc }}
+          EXTRA_PATCH: ${{ matrix.extra_patch }}
+          EXTRA_SCRIPT: ${{ matrix.extra_script }}
+          VARIANT: ${{ matrix.variant }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          SIMULATE_FAILURE: ${{ inputs.simulate_linux_failure }}
+        run: |
+          if [ "$DRY_RUN" = "true" ] && [ -n "$SIMULATE_FAILURE" ] && [ "$SIMULATE_FAILURE" = "$VARIANT" ]; then
+            echo "::error::simulated Linux build failure for $VARIANT (dry-run test)"; exit 1
+          fi
+          chmod +x build_turnip_linux.sh
+          ./build_turnip_linux.sh
+
+      - name: Verify Linux ZIP
+        env:
+          ZIP_NAME: Turnip-${{ needs.resolve.outputs.tag }}${{ matrix.suffix }}-Linux.zip
+          META_NAME: Mesa Turnip ${{ needs.resolve.outputs.tag }}${{ matrix.suffix }}-Linux
+          PACKAGE_VERSION: ${{ needs.resolve.outputs.day_num }}
+          VARIANT: ${{ matrix.variant }}
+        run: |
+          python3 .github/scripts/verify_driver_zip.py --kind linux \
+            --zip "linux_workdir/${ZIP_NAME}" --variant "$VARIANT" \
+            --expect-name "$META_NAME" --expect-package-version "$PACKAGE_VERSION" \
+            --build-report linux_workdir/build-report.json --report "report-linux-${VARIANT}.json" \
+            --readelf aarch64-linux-gnu-readelf
+
+      - name: Upload Linux driver ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          retention-days: 7
+          name: turnip-linux-${{ matrix.variant }}
+          path: linux_workdir/Turnip-*-Linux.zip
+          if-no-files-found: error
+
+      - name: Upload verification report
+        uses: actions/upload-artifact@v4
+        with:
+          retention-days: 7
+          name: report-linux-${{ matrix.variant }}
+          path: report-linux-*.json
+          if-no-files-found: error
+
+      - name: Upload build evidence on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          retention-days: 7
+          name: linux-failed-${{ matrix.variant }}
+          path: |
+            linux_workdir/mesa/build-linux/meson-logs/meson-log.txt
+            linux_workdir/build-report.json
+            linux_workdir/sysroot-packages.txt
+          if-no-files-found: ignore
+
   release:
     runs-on: ubuntu-latest
-    needs: [resolve, build, wayland]
+    needs: [resolve, build, wayland, linux]
     # Publish whatever drivers built and verified. A failed leg (an experimental Android driver
-    # against bleeding-edge Mesa, or any Wayland build) must NOT block the standard driver most
+    # against bleeding-edge Mesa, or any Wayland or Linux build) must NOT block the standard driver most
     # users grab; the failed leg still shows red and the release body names it.
     if: ${{ !cancelled() && needs.resolve.result == 'success' }}
     timeout-minutes: 30

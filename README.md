@@ -6,7 +6,7 @@
 [![Discord](https://img.shields.io/badge/Discord-Join%20Server-5865F2?logo=discord&logoColor=white)](https://discord.gg/n8S4G2WZQ4)
 
 
-> Automated, bleeding-edge builds of the [Mesa Turnip](https://docs.mesa3d.org/drivers/freedreno.html) Vulkan driver, compiled directly from the latest upstream Mesa commits. Every release ships each driver twice: for [AdrenoTools](https://github.com/K11MCH1/AdrenoToolsDrivers)-compatible apps (X11), and for Bannerlator Wayland containers.
+> Automated, bleeding-edge builds of the [Mesa Turnip](https://docs.mesa3d.org/drivers/freedreno.html) Vulkan driver, compiled directly from the latest upstream Mesa commits. Every release ships each driver three times: for [AdrenoTools](https://github.com/K11MCH1/AdrenoToolsDrivers)-compatible apps (X11), for Bannerlator Wayland containers, and as a glibc ICD for Bannerlator's Linux runtime and native Steam client.
 
 [![Build Turnip (Combined)](https://github.com/The412Banner/Banners-Turnip/actions/workflows/turnip_build_combined.yml/badge.svg?branch=A8xx)](https://github.com/The412Banner/Banners-Turnip/actions/workflows/turnip_build_combined.yml)
 [![Latest Release](https://img.shields.io/github/v/release/The412Banner/Banners-Turnip?label=latest%20release&color=blue)](https://github.com/The412Banner/Banners-Turnip/releases/latest)
@@ -17,26 +17,30 @@
 
 [Turnip](https://docs.mesa3d.org/drivers/freedreno.html) is the open-source Mesa Vulkan driver for Qualcomm Adreno GPUs — developed as part of the [Mesa](https://gitlab.freedesktop.org/mesa/mesa) project and maintained by the Freedreno community. Unlike the proprietary Qualcomm driver, Turnip is fully open-source and often ships fixes and feature support ahead of official Qualcomm releases.
 
-This repo automatically builds Turnip from the absolute latest commit on `mesa/main` — no waiting for official Mesa releases. A [Mesa upstream watcher](.github/workflows/mesa-watcher.yml) polls for new commits every hour and triggers a fresh build automatically whenever `mesa/main` advances. Each driver comes as two ZIPs from the same Mesa commit and patches:
+This repo automatically builds Turnip from the absolute latest commit on `mesa/main` — no waiting for official Mesa releases. A [Mesa upstream watcher](.github/workflows/mesa-watcher.yml) polls for new commits every hour and triggers a fresh build automatically whenever `mesa/main` advances. Each driver comes as three ZIPs from the same Mesa commit and patches:
 
 - an [AdrenoTools](https://github.com/K11MCH1/AdrenoToolsDrivers)-compatible ZIP you can drop straight into any compatible app (BannerHub/BCI, Winlator, Bannerlator X11, etc.);
-- a **Wayland** ZIP for Bannerlator Wayland containers.
+- a **Wayland** ZIP for Bannerlator Wayland containers;
+- a **Linux** ZIP for Bannerlator's Linux runtime — the gamescope session that runs Valve's native ARM64 Steam client.
+
+The three differ in what they link against, which is what decides where each one can be loaded: the first two are **bionic** (Android) objects, the Linux one is **glibc**. A process can only load its own.
 
 ---
 
 ## Driver Variants & Downloads
 
-Each release ships three drivers, each as two ZIPs built from the same Mesa commit and patches. Pick the driver for your GPU, then the ZIP for where you use it:
+Each release ships three drivers, each as three ZIPs built from the same Mesa commit and patches. Pick the driver for your GPU, then the ZIP for where you use it:
 
-| Driver | GPUs | X11 / AdrenoTools ZIP | Bannerlator Wayland ZIP |
-| :--- | :--- | :--- | :--- |
-| **Standard** | Adreno 6xx / 7xx (Snapdragon 8 Gen 3 and older) | `Turnip-<tag>.zip` | `Turnip-<tag>-Wayland.zip` |
-| **A8xx** (experimental) | Adreno 810 / 825 / 829 / 830 / 840 (Snapdragon 8 Elite) | `Turnip-<tag>-A8xx.zip` | `Turnip-<tag>-A8xx-Wayland.zip` |
-| **A710 / A720 / A722** (experimental) | Adreno 710 / 720 / 722 | `Turnip-<tag>-710-720-Test.zip` | `Turnip-<tag>-710-720-Test-Wayland.zip` |
+| Driver | GPUs | X11 / AdrenoTools ZIP | Bannerlator Wayland ZIP | Linux runtime ZIP |
+| :--- | :--- | :--- | :--- | :--- |
+| **Standard** | Adreno 6xx / 7xx (Snapdragon 8 Gen 3 and older) | `Turnip-<tag>.zip` | `Turnip-<tag>-Wayland.zip` | `Turnip-<tag>-Linux.zip` |
+| **A8xx** (experimental) | Adreno 810 / 825 / 829 / 830 / 840 (Snapdragon 8 Elite) | `Turnip-<tag>-A8xx.zip` | `Turnip-<tag>-A8xx-Wayland.zip` | `Turnip-<tag>-A8xx-Linux.zip` |
+| **A710 / A720 / A722** (experimental) | Adreno 710 / 720 / 722 | `Turnip-<tag>-710-720-Test.zip` | `Turnip-<tag>-710-720-Test-Wayland.zip` | `Turnip-<tag>-710-720-Test-Linux.zip` |
 
-- **X11 / AdrenoTools ZIP:** BannerHub/BCI, Winlator, Bannerlator X11 containers and any other AdrenoTools app.
+- **X11 / AdrenoTools ZIP:** BannerHub/BCI, Winlator, Bannerlator X11 containers and any other AdrenoTools app. This is also the driver that **puts the finished frame on the screen** on every path below — it is the only one with the Android surface WSI.
 - **Wayland ZIP:** Bannerlator **Wayland containers** only. It's a Linux-style Vulkan driver (KGSL, Wayland, bionic) with Bannerlator's zero-copy patch, built by [`build_turnip_wayland.sh`](build_turnip_wayland.sh). It doesn't load as an AdrenoTools driver, and an X11 ZIP doesn't work as a Wayland game driver.
-- CI checks every ZIP before it's attached. If a Wayland build fails, the release still ships its X11 ZIPs and the release notes say which Wayland ZIP is missing.
+- **Linux runtime ZIP:** Bannerlator's **Linux runtime** — the gamescope session running Valve's native ARM64 Steam client. It's a **glibc** Vulkan ICD (KGSL, Wayland + X11 WSI) built by [`build_turnip_linux.sh`](build_turnip_linux.sh) against the same Arch Linux ARM packages that runtime is made of, plus the two KGSL fixes it needs ([`patches/linux/`](patches/linux)). It draws the Steam client's own UI (OpenGL → Zink → Vulkan) and every game the client launches (D3D → DXVK/VKD3D → Vulkan). The client and its games are glibc processes, so neither bionic ZIP can be loaded by them at all — and this one can't be loaded by an Android app or a Wine container. It ships the ICD and its manifest only; the libraries are the runtime's own.
+- CI checks every ZIP before it's attached. If a Wayland or Linux build fails, the release still ships its X11 ZIPs and the release notes say which ZIP is missing.
 
 [**Download latest →**](https://github.com/The412Banner/Banners-Turnip/releases/latest) · [**Full build history →**](Mesa-commit-history.md)
 
@@ -50,7 +54,7 @@ Injects hardware-specific GPU entries and magic registers for Adreno 710, 720, a
 
 ### A8xx — Experimental
 
-Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830, A840). Built from Mesa `main` with the following on top (the same for the X11 and Wayland ZIPs):
+Targets Adreno 800-series (Snapdragon 8 Elite — A810, A825, A829, A830, A840). Built from Mesa `main` with the following on top (the same for the X11, Wayland and Linux ZIPs):
 
 | Patch | What it does |
 | :--- | :--- |
@@ -65,7 +69,7 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 
 | Workflow | Trigger | What it builds |
 | :--- | :--- | :--- |
-| **Build Turnip (Combined)** | Auto (mesa-watcher) or manual | Standard + A8xx + A710/A720/A722, Android and Wayland builds in parallel from one Mesa commit; each ZIP is checked in CI, then published as a single tagged release with notes written from what built (manual runs can set `dry_run` to build and verify without publishing) |
+| **Build Turnip (Combined)** | Auto (mesa-watcher) or manual | Standard + A8xx + A710/A720/A722, Android, Wayland and Linux builds in parallel from one Mesa commit; each ZIP is checked in CI, then published as a single tagged release with notes written from what built (manual runs can set `dry_run` to build and verify without publishing) |
 | **Build Turnip A8xx (Experimental)** | Manual | Standalone A8xx test build — faster iteration outside the release cycle |
 | **Build Turnip (Perf 6xx/7xx)** | Manual | A6xx/A7xx only, compiled with `-O3` + ThinLTO for performance testing |
 
@@ -76,6 +80,7 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 - **BannerHub / BCI:** Component Manager → Add New Component → select the X11 / AdrenoTools ZIP
 - **AdrenoTools-compatible apps (Winlator, Bannerlator X11, etc.):** load the X11 / AdrenoTools ZIP in GPU driver settings
 - **Bannerlator Wayland containers:** *Import Wayland game driver (.zip)* → select the `-Wayland.zip`, then pick it as the container's Wayland game driver
+- **Bannerlator Linux runtime (native Steam client):** import the `-Linux.zip` as the Linux shortcut's driver; it replaces the runtime's own `usr/lib/libvulkan_freedreno.so`
 
 ---
 

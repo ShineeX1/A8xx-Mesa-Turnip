@@ -23,11 +23,15 @@ def release_downloads(tag):
     except Exception:  # noqa: BLE001
         return ""
     wayland = [n for n in names if n.endswith("-Wayland.zip")]
-    x11 = [n for n in names if n not in wayland]
+    linux = [n for n in names if n.endswith("-Linux.zip")]
+    x11 = [n for n in names if n not in wayland and n not in linux]
     if not names:
         return ""
-    return (f"| **Downloads** | X11 / AdrenoTools: {len(x11)} ZIP{'s' if len(x11) != 1 else ''} · "
-            f"Bannerlator Wayland: {len(wayland)} ZIP{'s' if len(wayland) != 1 else ''} |\n")
+    def zips(n):
+        return f"{n} ZIP{'s' if n != 1 else ''}"
+    return (f"| **Downloads** | X11 / AdrenoTools: {zips(len(x11))} · "
+            f"Bannerlator Wayland: {zips(len(wayland))} · "
+            f"Linux runtime: {zips(len(linux))} |\n")
 
 latest = (
     "| | |\n"

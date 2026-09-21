@@ -11,6 +11,9 @@ Inputs:
 
 Exit 3 when the standard Android driver is not among them: without it there is no release
 (same rule as before the Wayland legs existed). Anything else missing is written into the body.
+
+Three platforms per driver: the AdrenoTools zip, the `-Wayland` zip for Bannerlator's Wine
+containers, and the `-Linux` zip (a glibc ICD) for its Linux runtime and native Steam client.
 """
 import argparse
 import glob
@@ -36,6 +39,12 @@ DRIVERS = [
         "gpus": "Adreno 710 / 720 / 722 (unverified on hardware)",
     },
 ]
+
+
+# One leg of every driver per platform. The suffix is part of the file name catalogs match on,
+# so it is fixed: "" is the AdrenoTools zip that has always been called that.
+PLATFORMS = ("android", "wayland", "linux")
+PLATFORM_SUFFIX = {"android": "", "wayland": "-Wayland", "linux": "-Linux"}
 
 
 def read_info(d, name):
@@ -108,12 +117,12 @@ def main():
         except Exception as e:  # noqa: BLE001
             print(f"ignoring unreadable report {p}: {e}", file=sys.stderr)
 
-    # Status of each of the six files.
+    # Status of each of the nine files.
     legs = {}
     assets = []
     for drv in DRIVERS:
-        for platform in ("android", "wayland"):
-            name = f"Turnip-{tag}{drv['suffix']}{'-Wayland' if platform == 'wayland' else ''}.zip"
+        for platform in PLATFORMS:
+            name = f"Turnip-{tag}{drv['suffix']}{PLATFORM_SUFFIX[platform]}.zip"
             path = os.path.join(a.zips, name)
             rep = reports.get(name)
             why = ""
@@ -153,6 +162,7 @@ def main():
     w = L.append
     android_bad = [d for d in DRIVERS if not legs[(d["variant"], "android")]["ok"]]
     wayland_bad = [d for d in DRIVERS if not legs[(d["variant"], "wayland")]["ok"]]
+    linux_bad = [d for d in DRIVERS if not legs[(d["variant"], "linux")]["ok"]]
 
     w("> ⚠️ **Automated build** from Mesa `main`: checked by CI, **not tested on a device.**")
     w("")
@@ -168,6 +178,13 @@ def main():
         why = "" if leg["why"] == "did not build" else f" ({leg['why']})"
         w(f"> ❌ The **Wayland** build of **{d['label']}** didn't build this run{why}. Its X11 zip is fine.")
         w("")
+    for d in linux_bad:
+        if not legs[(d["variant"], "android")]["ok"]:
+            continue
+        leg = legs[(d["variant"], "linux")]
+        why = "" if leg["why"] == "did not build" else f" ({leg['why']})"
+        w(f"> ❌ The **Linux** build of **{d['label']}** didn't build this run{why}. Its X11 zip is fine.")
+        w("")
 
     # Keep these three rows: update_readme.py reads Commit / Commit title / Vulkan version from past bodies.
     w("| Mesa | |")
@@ -179,8 +196,8 @@ def main():
     w("")
     w("### Downloads")
     w("")
-    w("| Driver | GPUs | X11 / AdrenoTools | Bannerlator Wayland |")
-    w("| :--- | :--- | :--- | :--- |")
+    w("| Driver | GPUs | X11 / AdrenoTools | Bannerlator Wayland | Linux runtime |")
+    w("| :--- | :--- | :--- | :--- | :--- |")
 
     def cell(variant, platform):
         leg = legs[(variant, platform)]
@@ -193,12 +210,20 @@ def main():
     }
     for d in DRIVERS:
         label, gpus = short[d["variant"]]
-        w(f"| {label} | {gpus} | {cell(d['variant'], 'android')} | {cell(d['variant'], 'wayland')} |")
+        w(f"| {label} | {gpus} | {cell(d['variant'], 'android')} | {cell(d['variant'], 'wayland')} "
+          f"| {cell(d['variant'], 'linux')} |")
     w("")
     w("**Which one?**")
     w("- **X11** (Bannerlator, Winlator, BannerHub, any AdrenoTools app): import the normal zip as a GPU driver. "
       "Not sure which driver? Use **Standard**.")
     w("- **Bannerlator Wayland containers:** *Import Wayland game driver (.zip)*, then pick the `-Wayland` zip.")
+    lx = legs[("regular", "linux")]["report"] or {}
+    glibc = lx.get("min_glibc") or lx.get("meta", {}).get("minGlibc") or ""
+    w("- **Bannerlator Linux runtime** (gamescope + the native ARM64 Steam client): the `-Linux` zip. It is a "
+      "**glibc** Vulkan ICD and it is what draws the client and every game the client launches"
+      + (f" (needs glibc {glibc} or newer)" if glibc else "") + ". "
+      "It is not an AdrenoTools driver and it does not load in a Wine container; the Android zip still puts the "
+      "finished frame on the screen.")
     w("")
     w("**Tips:** A8xx: `TU_DEBUG=sysmem` if an A830 looks glitchy, `TU_DEBUG=deck_emu` if a game won't start. "
       "A710 / A720 / A722: `TU_DEBUG=sysmem` (in Winlator also `WRAPPER_BLIT=1`).")
@@ -228,11 +253,15 @@ def main():
     w("- **Wayland zips:** the same commit and patches, built as Linux-style Vulkan drivers (KGSL, Wayland, bionic) "
       "with Bannerlator's zero-copy patch. CI checks each one before it is attached. They don't load as AdrenoTools "
       "drivers, and the X11 zips don't work as Wayland game drivers.")
+    w("- **Linux zips:** the same commit and patches, cross-built against glibc (KGSL, Wayland + X11 WSI) for "
+      "Bannerlator's Arch Linux ARM runtime, plus the two KGSL fixes that runtime needs "
+      + link("patches/linux/kgsl-drm-node.patch") + " and " + link("patches/linux/kgsl-no-calibrated-timestamps.patch")
+      + ". They ship the ICD and its manifest only: the libraries are the runtime's own. CI checks each one.")
     w("")
     w("| File | SHA-256 |")
     w("| :--- | :--- |")
     for d in DRIVERS:
-        for platform in ("android", "wayland"):
+        for platform in PLATFORMS:
             leg = legs[(d["variant"], platform)]
             if leg["ok"]:
                 w(f"| `{leg['name']}` | `{leg['report']['sha256']}` |")
