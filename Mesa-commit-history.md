@@ -5,6 +5,7 @@ A complete log of every Banners-Turnip release — newest first. Each entry link
 <!-- BUILDS_TABLE_START -->
 | Tag | Date | Mesa Commit | Commit Title | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260921](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921) | 2026-09-20 | [`366b006`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/366b006cfdb5aee1093271f4e58564f7394569ad) | etnaviv: Move magnification switch-over for shader LODs | Vulkan 1.4.363 |
 | [v26.3.0-20260920-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260920-r3) | 2026-09-20 | [`366b006`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/366b006cfdb5aee1093271f4e58564f7394569ad) | etnaviv: Move magnification switch-over for shader LODs | Vulkan 1.4.363 |
 | [v26.3.0-20260920-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260920-r2) | 2026-09-20 | [`e46ee71`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/e46ee71b43b1693a2baf22740b0157e7d31b79cc) | mesa/eval: Fix wrong auto-normal direction with reversed parameter ranges | Vulkan 1.4.363 |
 | [v26.3.0-20260920](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260920) | 2026-09-20 | [`3e7549d`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/3e7549d1a2fedaba560b56a91d73f16d54bfbef9) | radv: fix checking whether a FS is present | Vulkan 1.4.363 |
