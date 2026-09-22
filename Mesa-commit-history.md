@@ -5,6 +5,7 @@ A complete log of every Banners-Turnip release — newest first. Each entry link
 <!-- BUILDS_TABLE_START -->
 | Tag | Date | Mesa Commit | Commit Title | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260922](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922) | 2026-09-22 | [`055dfb7`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/055dfb760a6351090e63f9300cf15a2c3bfd12f0) | nir: model ftanh in opt_varyings and range analysis | Vulkan 1.4.363 |
 | [v26.3.0-20260921-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921-r5) | 2026-09-21 | [`5ff61a7`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/5ff61a7646d29b54c324af0a60aa3bfb5cdd24d1) | gfxstream: format with clang-format and enable enforcement | Vulkan 1.4.363 |
 | [v26.3.0-20260921-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921-r4) | 2026-09-21 | [`e204c3f`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/e204c3ff39182635c51609f2d654bfd6a9dfd2af) | r600: fix barycenter coordinates overlap | Vulkan 1.4.363 |
 | [v26.3.0-20260921-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921-r3) | 2026-09-21 | [`4c885e2`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/4c885e26282aa815d80ae53fc977d4ad13d406a0) | v3d: explicitly call util_gen_mipmap() on failure | Vulkan 1.4.363 |
