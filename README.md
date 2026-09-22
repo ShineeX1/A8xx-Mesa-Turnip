@@ -91,12 +91,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.363 |
-| **Commit** | [`47c78e4`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/47c78e4d0bde975e67b4d8a71ac31959267b7db4) |
+| **Commit** | [`6e18409`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/6e18409d5800f975538236c4152fa4eeca3b444e) |
 | **Commit date** | 2026-09-22 |
-| **Commit title** | gallium/hud: Drop vs_color's dead texcoord varying |
+| **Commit title** | radv: fix depth/stencil aspects for resolves |
 | **Build date** | 20260922 |
 | **Downloads** | X11 / AdrenoTools: 3 ZIPs · Bannerlator Wayland: 3 ZIPs · Linux runtime: 3 ZIPs |
-| **Release** | [v26.3.0-20260922-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r3) |
+| **Release** | [v26.3.0-20260922-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r4) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -106,11 +106,11 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260922-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r4) | 2026-09-22 | [`6e18409`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/6e18409d5800f975538236c4152fa4eeca3b444e) | radv: fix depth/stencil aspects for resolves | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r3) | 2026-09-22 | [`47c78e4`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/47c78e4d0bde975e67b4d8a71ac31959267b7db4) | gallium/hud: Drop vs_color's dead texcoord varying | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r2) | 2026-09-22 | [`1bce806`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/1bce80682fc5c08a1e396c34ad90a01f6085dbb7) | aco/sched_vopd: work around GFX11 VOPD interlock hazard | Vulkan 1.4.363 |
 | [v26.3.0-20260922](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922) | 2026-09-22 | [`055dfb7`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/055dfb760a6351090e63f9300cf15a2c3bfd12f0) | nir: model ftanh in opt_varyings and range analysis | Vulkan 1.4.363 |
 | [v26.3.0-20260921-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921-r5) | 2026-09-21 | [`5ff61a7`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/5ff61a7646d29b54c324af0a60aa3bfb5cdd24d1) | gfxstream: format with clang-format and enable enforcement | Vulkan 1.4.363 |
-| [v26.3.0-20260921-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921-r4) | 2026-09-21 | [`e204c3f`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/e204c3ff39182635c51609f2d654bfd6a9dfd2af) | r600: fix barycenter coordinates overlap | Vulkan 1.4.363 |
 <!-- RECENT_BUILDS_END -->
 
 ---
