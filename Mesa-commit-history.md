@@ -5,6 +5,7 @@ A complete log of every Banners-Turnip release — newest first. Each entry link
 <!-- BUILDS_TABLE_START -->
 | Tag | Date | Mesa Commit | Commit Title | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260922-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r3) | 2026-09-22 | [`47c78e4`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/47c78e4d0bde975e67b4d8a71ac31959267b7db4) | gallium/hud: Drop vs_color's dead texcoord varying | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r2) | 2026-09-22 | [`1bce806`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/1bce80682fc5c08a1e396c34ad90a01f6085dbb7) | aco/sched_vopd: work around GFX11 VOPD interlock hazard | Vulkan 1.4.363 |
 | [v26.3.0-20260922](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922) | 2026-09-22 | [`055dfb7`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/055dfb760a6351090e63f9300cf15a2c3bfd12f0) | nir: model ftanh in opt_varyings and range analysis | Vulkan 1.4.363 |
 | [v26.3.0-20260921-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921-r5) | 2026-09-21 | [`5ff61a7`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/5ff61a7646d29b54c324af0a60aa3bfb5cdd24d1) | gfxstream: format with clang-format and enable enforcement | Vulkan 1.4.363 |

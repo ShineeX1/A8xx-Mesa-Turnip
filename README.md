@@ -91,12 +91,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.363 |
-| **Commit** | [`1bce806`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/1bce80682fc5c08a1e396c34ad90a01f6085dbb7) |
+| **Commit** | [`47c78e4`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/47c78e4d0bde975e67b4d8a71ac31959267b7db4) |
 | **Commit date** | 2026-09-22 |
-| **Commit title** | aco/sched_vopd: work around GFX11 VOPD interlock hazard |
+| **Commit title** | gallium/hud: Drop vs_color's dead texcoord varying |
 | **Build date** | 20260922 |
 | **Downloads** | X11 / AdrenoTools: 3 ZIPs · Bannerlator Wayland: 3 ZIPs · Linux runtime: 3 ZIPs |
-| **Release** | [v26.3.0-20260922-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r2) |
+| **Release** | [v26.3.0-20260922-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r3) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -106,12 +106,11 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260922-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r3) | 2026-09-22 | [`47c78e4`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/47c78e4d0bde975e67b4d8a71ac31959267b7db4) | gallium/hud: Drop vs_color's dead texcoord varying | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r2) | 2026-09-22 | [`1bce806`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/1bce80682fc5c08a1e396c34ad90a01f6085dbb7) | aco/sched_vopd: work around GFX11 VOPD interlock hazard | Vulkan 1.4.363 |
 | [v26.3.0-20260922](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922) | 2026-09-22 | [`055dfb7`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/055dfb760a6351090e63f9300cf15a2c3bfd12f0) | nir: model ftanh in opt_varyings and range analysis | Vulkan 1.4.363 |
 | [v26.3.0-20260921-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921-r5) | 2026-09-21 | [`5ff61a7`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/5ff61a7646d29b54c324af0a60aa3bfb5cdd24d1) | gfxstream: format with clang-format and enable enforcement | Vulkan 1.4.363 |
 | [v26.3.0-20260921-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921-r4) | 2026-09-21 | [`e204c3f`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/e204c3ff39182635c51609f2d654bfd6a9dfd2af) | r600: fix barycenter coordinates overlap | Vulkan 1.4.363 |
-| [v26.3.0-20260921-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921-r3) | 2026-09-21 | [`4c885e2`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/4c885e26282aa815d80ae53fc977d4ad13d406a0) | v3d: explicitly call util_gen_mipmap() on failure | Vulkan 1.4.363 |
-| [v26.3.0-20260921-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921-r2) | 2026-09-21 | [`69d5296`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/69d5296c0cdc41b1440b4186f13740526a0f8fa9) | radv: remove a very old way to import RadeonSI images | Vulkan 1.4.363 |
 <!-- RECENT_BUILDS_END -->
 
 ---
