@@ -5,6 +5,7 @@ A complete log of every Banners-Turnip release — newest first. Each entry link
 <!-- BUILDS_TABLE_START -->
 | Tag | Date | Mesa Commit | Commit Title | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260923-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r2) | 2026-09-23 | [`82b8689`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/82b868960e00805e800ee164e6696a9fa57e92b9) | tu: Enable VK_KHR_multiview and Vulkan 1.3 on all a6xx devices | Vulkan 1.4.363 |
 | [v26.3.0-20260923](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923) | 2026-09-23 | [`a98d800`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/a98d800e35587ad52ee03484553210c59c9e339f) | gfxstream: add VK_EXT_HEADLESS_SURFACE_EXTENSION_NAME | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r6](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r6) | 2026-09-22 | [`933c11a`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/933c11a63e7e091eeed49d9806f2f87b2fe214e4) | zink: switch EXT/KHR functions to the promoted/non-suffixed name | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r5) | 2026-09-22 | [`44cc4ca`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/44cc4ca677a4752a10c14194289bde5a6468675e) | anv: disable DRM_XE_DEVICE_QUERY_ENGINE_CYCLES with UnrealEngine 5.8 | Vulkan 1.4.363 |
