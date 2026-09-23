@@ -5,6 +5,7 @@ A complete log of every Banners-Turnip release — newest first. Each entry link
 <!-- BUILDS_TABLE_START -->
 | Tag | Date | Mesa Commit | Commit Title | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260923-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r4) | 2026-09-23 | [`ab6ec72`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/ab6ec72fb528759c4c0aee515f380029cef9484f) | meson: list MIPS(64) in llvm_has_mcjit list | Vulkan 1.4.363 |
 | [v26.3.0-20260923-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r3) | 2026-09-23 | [`daf215a`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/daf215ad078d2f77cbc7af157655868ffca3790d) | util: probe for _SC_PHYS_PAGES, not just for sysconf() | Vulkan 1.4.363 |
 | [v26.3.0-20260923-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r2) | 2026-09-23 | [`82b8689`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/82b868960e00805e800ee164e6696a9fa57e92b9) | tu: Enable VK_KHR_multiview and Vulkan 1.3 on all a6xx devices | Vulkan 1.4.363 |
 | [v26.3.0-20260923](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923) | 2026-09-23 | [`a98d800`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/a98d800e35587ad52ee03484553210c59c9e339f) | gfxstream: add VK_EXT_HEADLESS_SURFACE_EXTENSION_NAME | Vulkan 1.4.363 |
