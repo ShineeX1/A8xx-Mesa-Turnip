@@ -91,12 +91,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.363 |
-| **Commit** | [`933c11a`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/933c11a63e7e091eeed49d9806f2f87b2fe214e4) |
-| **Commit date** | 2026-09-22 |
-| **Commit title** | zink: switch EXT/KHR functions to the promoted/non-suffixed name |
-| **Build date** | 20260922 |
+| **Commit** | [`a98d800`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/a98d800e35587ad52ee03484553210c59c9e339f) |
+| **Commit date** | 2026-09-23 |
+| **Commit title** | gfxstream: add VK_EXT_HEADLESS_SURFACE_EXTENSION_NAME |
+| **Build date** | 20260923 |
 | **Downloads** | X11 / AdrenoTools: 3 ZIPs · Bannerlator Wayland: 3 ZIPs · Linux runtime: 3 ZIPs |
-| **Release** | [v26.3.0-20260922-r6](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r6) |
+| **Release** | [v26.3.0-20260923](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -106,13 +106,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260923](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923) | 2026-09-23 | [`a98d800`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/a98d800e35587ad52ee03484553210c59c9e339f) | gfxstream: add VK_EXT_HEADLESS_SURFACE_EXTENSION_NAME | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r6](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r6) | 2026-09-22 | [`933c11a`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/933c11a63e7e091eeed49d9806f2f87b2fe214e4) | zink: switch EXT/KHR functions to the promoted/non-suffixed name | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r5) | 2026-09-22 | [`44cc4ca`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/44cc4ca677a4752a10c14194289bde5a6468675e) | anv: disable DRM_XE_DEVICE_QUERY_ENGINE_CYCLES with UnrealEngine 5.8 | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r4) | 2026-09-22 | [`6e18409`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/6e18409d5800f975538236c4152fa4eeca3b444e) | radv: fix depth/stencil aspects for resolves | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r3) | 2026-09-22 | [`47c78e4`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/47c78e4d0bde975e67b4d8a71ac31959267b7db4) | gallium/hud: Drop vs_color's dead texcoord varying | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r2) | 2026-09-22 | [`1bce806`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/1bce80682fc5c08a1e396c34ad90a01f6085dbb7) | aco/sched_vopd: work around GFX11 VOPD interlock hazard | Vulkan 1.4.363 |
-| [v26.3.0-20260922](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922) | 2026-09-22 | [`055dfb7`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/055dfb760a6351090e63f9300cf15a2c3bfd12f0) | nir: model ftanh in opt_varyings and range analysis | Vulkan 1.4.363 |
-| [v26.3.0-20260921-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260921-r5) | 2026-09-21 | [`5ff61a7`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/5ff61a7646d29b54c324af0a60aa3bfb5cdd24d1) | gfxstream: format with clang-format and enable enforcement | Vulkan 1.4.363 |
 <!-- RECENT_BUILDS_END -->
 
 ---
