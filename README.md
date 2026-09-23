@@ -91,12 +91,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.363 |
-| **Commit** | [`82b8689`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/82b868960e00805e800ee164e6696a9fa57e92b9) |
+| **Commit** | [`daf215a`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/daf215ad078d2f77cbc7af157655868ffca3790d) |
 | **Commit date** | 2026-09-23 |
-| **Commit title** | tu: Enable VK_KHR_multiview and Vulkan 1.3 on all a6xx devices |
+| **Commit title** | util: probe for _SC_PHYS_PAGES, not just for sysconf() |
 | **Build date** | 20260923 |
 | **Downloads** | X11 / AdrenoTools: 3 ZIPs · Bannerlator Wayland: 2 ZIPs · Linux runtime: 2 ZIPs |
-| **Release** | [v26.3.0-20260923-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r2) |
+| **Release** | [v26.3.0-20260923-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r3) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -106,12 +106,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260923-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r3) | 2026-09-23 | [`daf215a`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/daf215ad078d2f77cbc7af157655868ffca3790d) | util: probe for _SC_PHYS_PAGES, not just for sysconf() | Vulkan 1.4.363 |
 | [v26.3.0-20260923-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r2) | 2026-09-23 | [`82b8689`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/82b868960e00805e800ee164e6696a9fa57e92b9) | tu: Enable VK_KHR_multiview and Vulkan 1.3 on all a6xx devices | Vulkan 1.4.363 |
 | [v26.3.0-20260923](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923) | 2026-09-23 | [`a98d800`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/a98d800e35587ad52ee03484553210c59c9e339f) | gfxstream: add VK_EXT_HEADLESS_SURFACE_EXTENSION_NAME | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r6](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r6) | 2026-09-22 | [`933c11a`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/933c11a63e7e091eeed49d9806f2f87b2fe214e4) | zink: switch EXT/KHR functions to the promoted/non-suffixed name | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r5) | 2026-09-22 | [`44cc4ca`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/44cc4ca677a4752a10c14194289bde5a6468675e) | anv: disable DRM_XE_DEVICE_QUERY_ENGINE_CYCLES with UnrealEngine 5.8 | Vulkan 1.4.363 |
 | [v26.3.0-20260922-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r4) | 2026-09-22 | [`6e18409`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/6e18409d5800f975538236c4152fa4eeca3b444e) | radv: fix depth/stencil aspects for resolves | Vulkan 1.4.363 |
-| [v26.3.0-20260922-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260922-r3) | 2026-09-22 | [`47c78e4`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/47c78e4d0bde975e67b4d8a71ac31959267b7db4) | gallium/hud: Drop vs_color's dead texcoord varying | Vulkan 1.4.363 |
 <!-- RECENT_BUILDS_END -->
 
 ---
