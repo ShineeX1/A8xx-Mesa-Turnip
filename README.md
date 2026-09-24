@@ -91,12 +91,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.363 |
-| **Commit** | [`3e15a53`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/3e15a53a2817b4269d0c117aa16ba3764d440953) |
+| **Commit** | [`5498422`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/54984226000f5c56b6bc2d43199ba91938ed29d5) |
 | **Commit date** | 2026-09-24 |
-| **Commit title** | freedreno/common: Fix a702 chip-id |
+| **Commit title** | pan/ci: Use a new kernel to fix the G925 flakes |
 | **Build date** | 20260924 |
 | **Downloads** | X11 / AdrenoTools: 2 ZIPs · Bannerlator Wayland: 2 ZIPs · Linux runtime: 2 ZIPs |
-| **Release** | [v26.3.0-20260924-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r4) |
+| **Release** | [v26.3.0-20260924-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r5) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -106,12 +106,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260924-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r5) | 2026-09-24 | [`5498422`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/54984226000f5c56b6bc2d43199ba91938ed29d5) | pan/ci: Use a new kernel to fix the G925 flakes | Vulkan 1.4.363 |
 | [v26.3.0-20260924-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r4) | 2026-09-24 | [`3e15a53`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/3e15a53a2817b4269d0c117aa16ba3764d440953) | freedreno/common: Fix a702 chip-id | Vulkan 1.4.363 |
 | [v26.3.0-20260924-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r3) | 2026-09-24 | [`f0201d5`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f0201d5966fb31c2eebaa9618128cf1670b40d72) | broadcom/ci: update expected test results | Vulkan 1.4.363 |
 | [v26.3.0-20260924-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r2) | 2026-09-24 | [`ecf5201`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/ecf5201fb90412dbfa2f0886597e849bcf703005) | meson: readd ignore of unsafe_op_in_unsafe_fn warnings | Vulkan 1.4.363 |
 | [v26.3.0-20260924](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924) | 2026-09-24 | [`ec1cc05`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/ec1cc058add15f0f163f2866b33c68d9d782efcf) | gfxstream: consolidate declare macro | Vulkan 1.4.363 |
 | [v26.3.0-20260923-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r5) | 2026-09-23 | [`7b5888e`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/7b5888e8ca77cc0b407c7fb113df85764b561a86) | radv: fix immutable samplers lifetime with descriptor update templates | Vulkan 1.4.363 |
-| [v26.3.0-20260923-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r4) | 2026-09-23 | [`ab6ec72`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/ab6ec72fb528759c4c0aee515f380029cef9484f) | meson: list MIPS(64) in llvm_has_mcjit list | Vulkan 1.4.363 |
 <!-- RECENT_BUILDS_END -->
 
 ---
