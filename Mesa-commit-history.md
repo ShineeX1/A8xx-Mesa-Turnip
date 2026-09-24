@@ -5,6 +5,7 @@ A complete log of every Banners-Turnip release — newest first. Each entry link
 <!-- BUILDS_TABLE_START -->
 | Tag | Date | Mesa Commit | Commit Title | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260924-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r3) | 2026-09-24 | [`f0201d5`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f0201d5966fb31c2eebaa9618128cf1670b40d72) | broadcom/ci: update expected test results | Vulkan 1.4.363 |
 | [v26.3.0-20260924-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r2) | 2026-09-24 | [`ecf5201`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/ecf5201fb90412dbfa2f0886597e849bcf703005) | meson: readd ignore of unsafe_op_in_unsafe_fn warnings | Vulkan 1.4.363 |
 | [v26.3.0-20260924](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924) | 2026-09-23 | [`ec1cc05`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/ec1cc058add15f0f163f2866b33c68d9d782efcf) | gfxstream: consolidate declare macro | Vulkan 1.4.363 |
 | [v26.3.0-20260923-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r5) | 2026-09-23 | [`7b5888e`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/7b5888e8ca77cc0b407c7fb113df85764b561a86) | radv: fix immutable samplers lifetime with descriptor update templates | Vulkan 1.4.363 |

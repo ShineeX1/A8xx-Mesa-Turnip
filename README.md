@@ -91,12 +91,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.363 |
-| **Commit** | [`ecf5201`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/ecf5201fb90412dbfa2f0886597e849bcf703005) |
+| **Commit** | [`f0201d5`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f0201d5966fb31c2eebaa9618128cf1670b40d72) |
 | **Commit date** | 2026-09-24 |
-| **Commit title** | meson: readd ignore of unsafe_op_in_unsafe_fn warnings |
+| **Commit title** | broadcom/ci: update expected test results |
 | **Build date** | 20260924 |
 | **Downloads** | X11 / AdrenoTools: 2 ZIPs · Bannerlator Wayland: 2 ZIPs · Linux runtime: 2 ZIPs |
-| **Release** | [v26.3.0-20260924-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r2) |
+| **Release** | [v26.3.0-20260924-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r3) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -106,12 +106,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260924-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r3) | 2026-09-24 | [`f0201d5`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f0201d5966fb31c2eebaa9618128cf1670b40d72) | broadcom/ci: update expected test results | Vulkan 1.4.363 |
 | [v26.3.0-20260924-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r2) | 2026-09-24 | [`ecf5201`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/ecf5201fb90412dbfa2f0886597e849bcf703005) | meson: readd ignore of unsafe_op_in_unsafe_fn warnings | Vulkan 1.4.363 |
 | [v26.3.0-20260924](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924) | 2026-09-24 | [`ec1cc05`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/ec1cc058add15f0f163f2866b33c68d9d782efcf) | gfxstream: consolidate declare macro | Vulkan 1.4.363 |
 | [v26.3.0-20260923-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r5) | 2026-09-23 | [`7b5888e`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/7b5888e8ca77cc0b407c7fb113df85764b561a86) | radv: fix immutable samplers lifetime with descriptor update templates | Vulkan 1.4.363 |
 | [v26.3.0-20260923-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r4) | 2026-09-23 | [`ab6ec72`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/ab6ec72fb528759c4c0aee515f380029cef9484f) | meson: list MIPS(64) in llvm_has_mcjit list | Vulkan 1.4.363 |
 | [v26.3.0-20260923-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r3) | 2026-09-23 | [`daf215a`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/daf215ad078d2f77cbc7af157655868ffca3790d) | util: probe for _SC_PHYS_PAGES, not just for sysconf() | Vulkan 1.4.363 |
-| [v26.3.0-20260923-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260923-r2) | 2026-09-23 | [`82b8689`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/82b868960e00805e800ee164e6696a9fa57e92b9) | tu: Enable VK_KHR_multiview and Vulkan 1.3 on all a6xx devices | Vulkan 1.4.363 |
 <!-- RECENT_BUILDS_END -->
 
 ---
