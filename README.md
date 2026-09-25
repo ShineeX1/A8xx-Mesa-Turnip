@@ -91,12 +91,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 | :--- | :--- |
 | **Mesa version** | 26.3.0 |
 | **Vulkan version** | Vulkan 1.4.363 |
-| **Commit** | [`006ac53`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/006ac533562c163b54e9f28ca1d6a33511688afb) |
+| **Commit** | [`b739817`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/b739817b7e816d9728be1aad9616127c2c84e926) |
 | **Commit date** | 2026-09-25 |
-| **Commit title** | gallivm: reinterpret image texels using the shader's format qualifier |
+| **Commit title** | ir3: don't use MGEN.B for nir_op_bfm on a3xx |
 | **Build date** | 20260925 |
 | **Downloads** | X11 / AdrenoTools: 2 ZIPs · Bannerlator Wayland: 2 ZIPs · Linux runtime: 2 ZIPs |
-| **Release** | [v26.3.0-20260925](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260925) |
+| **Release** | [v26.3.0-20260925-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260925-r2) |
 <!-- LATEST_BUILD_END -->
 
 ---
@@ -106,12 +106,12 @@ Tips: `TU_DEBUG=sysmem` if an A830 looks glitchy; `TU_DEBUG=deck_emu` if a game 
 <!-- RECENT_BUILDS_START -->
 | Tag | Date | Commit | Description | Vulkan |
 | :--- | :--- | :--- | :--- | :--- |
+| [v26.3.0-20260925-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260925-r2) | 2026-09-25 | [`b739817`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/b739817b7e816d9728be1aad9616127c2c84e926) | ir3: don't use MGEN.B for nir_op_bfm on a3xx | Vulkan 1.4.363 |
 | [v26.3.0-20260925](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260925) | 2026-09-25 | [`006ac53`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/006ac533562c163b54e9f28ca1d6a33511688afb) | gallivm: reinterpret image texels using the shader's format qualifier | Vulkan 1.4.363 |
 | [v26.3.0-20260924-r6](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r6) | 2026-09-24 | [`6e397df`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/6e397df8201604381808c648af565e0a7305389e) | util/format: make the FXT1 codec independent of host byte order | Vulkan 1.4.363 |
 | [v26.3.0-20260924-r5](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r5) | 2026-09-24 | [`5498422`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/54984226000f5c56b6bc2d43199ba91938ed29d5) | pan/ci: Use a new kernel to fix the G925 flakes | Vulkan 1.4.363 |
 | [v26.3.0-20260924-r4](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r4) | 2026-09-24 | [`3e15a53`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/3e15a53a2817b4269d0c117aa16ba3764d440953) | freedreno/common: Fix a702 chip-id | Vulkan 1.4.363 |
 | [v26.3.0-20260924-r3](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r3) | 2026-09-24 | [`f0201d5`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/f0201d5966fb31c2eebaa9618128cf1670b40d72) | broadcom/ci: update expected test results | Vulkan 1.4.363 |
-| [v26.3.0-20260924-r2](https://github.com/The412Banner/Banners-Turnip/releases/tag/v26.3.0-20260924-r2) | 2026-09-24 | [`ecf5201`](https://gitlab.freedesktop.org/mesa/mesa/-/commit/ecf5201fb90412dbfa2f0886597e849bcf703005) | meson: readd ignore of unsafe_op_in_unsafe_fn warnings | Vulkan 1.4.363 |
 <!-- RECENT_BUILDS_END -->
 
 ---
